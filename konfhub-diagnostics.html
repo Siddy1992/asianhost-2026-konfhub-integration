@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KonfHub Ticket Mapping Diagnostics | AsianHOST 2026</title>
+<link rel="icon" href="assets/asianhost-logo.png" type="image/png">
+<style>
+:root{font-family:system-ui,Arial,sans-serif;color:#152642;background:#f2f5fa}*{box-sizing:border-box}body{margin:0}header{background:#0d1f41;color:#fff;padding:22px}header div{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:15px;align-items:center}a{color:#0b3475}header a{color:#fff}main{max-width:1100px;margin:30px auto;padding:0 18px}h1{margin:0 0 10px}p{line-height:1.55}table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden}th,td{padding:12px;text-align:left;border-bottom:1px solid #e0e7f2;font-size:14px}th{background:#e7edf7}.yes{color:#136b3b;font-weight:700}.no{color:#a02d2d;font-weight:700}.notice{background:#fff8e8;border:1px solid #e4c77b;padding:14px 18px;border-radius:10px;margin:18px 0}code{background:#e8eff8;padding:2px 5px;border-radius:4px}button{padding:10px 15px;border-radius:8px;background:#0b3475;color:#fff;border:0;cursor:pointer}#errors{white-space:pre-wrap;color:#8a2b2b;font-size:13px;overflow-wrap:anywhere}@media(max-width:600px){th,td{font-size:12px;padding:7px}table{display:block;overflow-x:auto}}
+</style>
+<script defer src="konfhub-integration.js"></script>
+<script defer>
+window.addEventListener('DOMContentLoaded',async()=>{
+ const K=window.AsianHOSTKonfHub;
+ const $=id=>document.getElementById(id);
+ const response=await K.getTickets();
+ $('source').textContent=response.source;
+ $('count').textContent=String(response.tickets.length);
+ $('errors').textContent=response.errors.join('\n');
+ let ready=0;
+ for(const [key,def] of Object.entries(K.TICKETS)){
+   const t=K.matchTicket(response.tickets,key);
+   if(t)ready++;
+   const tr=document.createElement('tr');
+   for(const value of [key,def.names[0],String(def.amount),t?String(K.getTicketId(t)):'—',t?String(K.getTicketForms(t).length):'—',t?'Mapped':'Missing']){
+     const td=document.createElement('td');td.textContent=value;tr.appendChild(td);
+   }
+   tr.lastElementChild.className=t?'yes':'no';
+   $('tickets').appendChild(tr);
+ }
+ $('mapped').textContent=ready+'/13';
+});
+</script>
+</head>
+<body>
+<header><div><strong>AsianHOST 2026 · KonfHub Mapping Diagnostics</strong><a href="index.html">← Registration home</a></div></header>
+<main>
+<h1>Ticket and form mapping check</h1>
+<p>This developer-only diagnostic uses the public KonfHub ticket metadata. It never requests private API keys or payment information.</p>
+<div class="notice"><strong>Source:</strong> <span id="source">Loading…</span> · <strong>Tickets found:</strong> <span id="count">—</span> · <strong>Mapped variants:</strong> <span id="mapped">—</span></div>
+<table><thead><tr><th>Website key</th><th>Expected KonfHub ticket</th><th>Fee (₹)</th><th>Ticket ID</th><th>Fields</th><th>Status</th></tr></thead><tbody id="tickets"></tbody></table>
+<h2>Loading diagnostics</h2><p id="errors">Loading…</p>
+<p>When tickets are missing, open <a href="https://api.konfhub.com/event/url/asian-host-ticketing/tickets" target="_blank" rel="noopener">KonfHub's public tickets API</a>, save its JSON response as <code>konfhub-public-tickets.json</code> in the repository root, and reload this page. Do not upload private credentials or attendee data.</p>
+<p><a href="START_HERE_KONFHUB.md">Read the full integration and GitHub Pages setup guide</a></p>
+</main>
+</body>
+</html>

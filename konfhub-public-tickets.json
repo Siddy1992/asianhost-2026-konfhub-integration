@@ -1,0 +1,4 @@
+{
+  "tickets": [],
+  "note": "Optional fallback: paste the PUBLIC response from https://api.konfhub.com/event/url/asian-host-ticketing/tickets here. Never paste API keys, attendee data, bank details, or private tokens."
+}

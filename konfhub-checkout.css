@@ -1,0 +1,26 @@
+/* Additive KonfHub styles. Original styles.css is unchanged. */
+.kh-intro { max-width: 1040px; margin: 0 auto 18px; }
+.kh-notice { padding: 15px 18px; border-radius: 10px; margin: 14px 0; background: #f3f6fd; border: 1px solid #cbd9ed; color: #263b5c; line-height: 1.5; }
+.kh-notice.warning { background: #fff8e7; border-color: #e8c77c; color: #704e17; }
+.kh-notice.error { background: #fff0f0; border-color: #efb8b8; color: #782828; }
+.kh-status { margin: 10px 0 16px; }
+.kh-button { display: inline-block; border: 0; border-radius: 8px; background: #0b3475; color: #fff !important; padding: 14px 20px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; text-align: center; }
+.kh-button:hover { background: #102858; }
+.kh-button[hidden] { display: none !important; }
+.kh-button-secondary { background: #e8effb; color: #14376c !important; }
+.kh-button-secondary:hover { background: #d5e3f7; }
+.kh-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 18px 0; }
+.kh-widget { margin-top: 18px; border: 1px solid #d6deec; border-radius: 12px; overflow: hidden; background: #fff; }
+.kh-widget iframe { display: block; width: 100%; min-height: 1000px; border: 0; }
+.kh-widget[hidden], .kh-notice[hidden], .kh-status[hidden] { display: none !important; }
+.kh-details { font-size: 13px; line-height: 1.5; color: #53647c; }
+.kh-summary { width: 100%; border-collapse: collapse; }
+.kh-summary td { padding: 9px 0; border-bottom: 1px solid #e9eef5; vertical-align: top; }
+.kh-summary td:last-child { text-align: right; font-weight: 650; overflow-wrap: anywhere; }
+.kh-checkout-grid { display: grid; grid-template-columns: minmax(280px,0.9fr) minmax(330px,1.2fr); gap: 22px; align-items: start; }
+.kh-panel { background: #fff; border: 1px solid #e1e7f0; border-radius: 14px; padding: 24px; box-shadow: 0 6px 20px rgba(13,31,65,.05); }
+.kh-panel h2 { margin: 0 0 15px; font-size: 22px; }
+.kh-panel h3 { margin: 0 0 12px; font-size: 18px; }
+.kh-pill { display: inline-block; background: #eaf0fb; color: #163f82; border-radius: 100px; padding: 5px 10px; font-size: 12px; font-weight: 700; }
+.kh-privacy { font-size: 12px; line-height: 1.5; color: #53647c; margin-top: 15px; }
+@media (max-width: 850px) { .kh-checkout-grid { grid-template-columns: 1fr; } .kh-widget iframe { min-height: 1150px; } }
