@@ -1,7 +1,10 @@
 'use strict';
 /* KonfHub integration: no mock payments, no client-side paid status, no coupons in JS. */
 const STORAGE_KEY = 'asianhost2026_demo_registrations_inr_v2';
-const REGULAR_AMOUNTS = {'ieee':60000,'nonieee':70000,'ieee-student':25000,'nonieee-student':35000,'life':35000};
+const REGISTRATION_CONFIG = window.AsianHOSTRegistrationConfig;
+if (!REGISTRATION_CONFIG) throw new Error('registration-config.js must load before checkout.js');
+const REGULAR_AMOUNTS = REGISTRATION_CONFIG.REGULAR_AMOUNTS;
+const EARLY_AMOUNTS = REGISTRATION_CONFIG.EARLY_AMOUNTS;
 const $ = id => document.getElementById(id);
 const money = n => '₹' + Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
 function readOrders() {
@@ -43,14 +46,23 @@ async function init() {
     showMessage('Supplementary balance payments are not configured in KonfHub. Contact the organizing committee for an authorized payment route.','error');
     return;
   }
-  // Preserve the original site's early-deadline safety behavior.
-  if (order.period === 'early' && Date.now() >= integration.EARLY_CUTOFF && REGULAR_AMOUNTS[order.category] != null) {
-    order.period = 'regular';
-    order.amount = REGULAR_AMOUNTS[order.category];
-    order.updated = new Date().toISOString();
-    orders[id] = order;
-    saveOrders(orders);
-    showMessage('The early registration deadline has passed. The checkout fee has been updated to the regular/on-site rate. Please verify it before proceeding.','warning');
+  // Repair pending records created when the earlier 15 November cutoff was in force.
+  // The price must reflect the actual date of checkout, not a stale browser record.
+  // Do not modify any record already marked paid in the local demo.
+  if (order.status === 'pending' && REGULAR_AMOUNTS[order.category] != null) {
+    const earlyOpen = Date.now() < integration.EARLY_CUTOFF;
+    const targetPeriod = earlyOpen ? 'early' : 'regular';
+    const targetAmount = earlyOpen ? EARLY_AMOUNTS[order.category] : REGULAR_AMOUNTS[order.category];
+    if (order.period !== targetPeriod || Number(order.amount) !== targetAmount) {
+      order.period = targetPeriod;
+      order.amount = targetAmount;
+      order.updated = new Date().toISOString();
+      orders[id] = order;
+      saveOrders(orders);
+      showMessage(earlyOpen
+        ? 'The early deadline has been extended to 30 November 2026. Your pending registration has been updated to the early rate. Please review the amount before checkout.'
+        : 'Early registration has closed. Your pending registration has been updated to the regular/on-site rate. Please review the amount before checkout.','warning');
+    }
   }
   renderOrder(order);
   const result = await integration.getTickets();

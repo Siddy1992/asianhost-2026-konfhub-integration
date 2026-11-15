@@ -22,8 +22,9 @@ if ORIGINAL.exists():
         for n in originals:
             rel=n[len(prefix):]
             if (ROOT/rel).read_bytes()!=z.read(n): modified.append(rel)
-        assert sorted(modified)==['checkout.html','checkout.js','developer_tools/README.md','developer_tools/verify_package.py'],f'Unexpected modifications: {modified}'
-        print('PASS: All original website files except checkout.html and checkout.js are byte-identical (developer test/docs updated).')
+        allowed={'CHANGELOG.md','IMPORTANT_README_FIRST.txt','README.md','app.js','checkout.html','checkout.js','developer_tools/README.md','developer_tools/regression_suite.py','developer_tools/verify_package.py','index.html','terms.html'}
+        assert set(modified)<=allowed,f'Unexpected modifications to original site: {modified}'
+        print('PASS: Original non-calendar, non-checkout site files are unchanged.')
 else:
     print('Original source ZIP not available; structural checks completed.')
 print('PASS: Required files present, original demo payment controls removed, KonfHub integration linked.')

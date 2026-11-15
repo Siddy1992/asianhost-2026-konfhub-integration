@@ -6,7 +6,7 @@ const SAMPLE_COUPONS={
   'ASIANHOST-GUEST':{percent:100,label:'Invited participant waiver'},
   'PHD26-FREE':{percent:100,label:'PhD Forum participation waiver'}
 };
-const REGULAR_START_MS=Date.parse('2026-11-16T00:00:00+05:30');
+const REGULAR_START_MS=Date.parse('2026-12-01T00:00:00+05:30');
 const REGULAR_AMOUNTS={'ieee':60000,'nonieee':70000,'ieee-student':25000,'nonieee-student':35000,'life':35000};
 const $=id=>document.getElementById(id);
 const money=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});

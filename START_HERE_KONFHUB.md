@@ -30,7 +30,7 @@ The original `checkout.html` and `checkout.js` are also backed up in `developer_
 1. Participant opens the new GitHub Pages site and uses the **unchanged** AsianHOST registration form.
 2. Participant selects purpose, category, paper, and fills name/email/institution/phone, etc.
 3. The unchanged `app.js` validates the information, creates `AH26-...`, stores a **pending** record in this browser, and navigates to `checkout.html?id=AH26-...`.
-4. New `checkout.js` reads that record, rechecks the 15 November early-fee cutoff, and finds the **matching** KonfHub ticket using the public tickets API or the local public snapshot.
+4. New `checkout.js` reads that record, rechecks the 30 November early-fee cutoff, and finds the **matching** KonfHub ticket using the public tickets API or the local public snapshot.
 5. New `konfhub-integration.js` builds a direct-to-form checkout URL with the correct `ticketId`, name, email, institution, WhatsApp number, and supported custom-field IDs (including AsianHOST Registration ID).
 6. Participant clicks **Continue to KonfHub — details prefilled**. KonfHub's checkout opens in a new tab, where the participant reviews all fields, completes any unfilled fields (including consent), applies **KonfHub-managed** coupons, and pays if authorized.
 7. KonfHub issues the actual ticket/payment confirmation. **The static GitHub Pages website does not mark the browser record as paid.**
@@ -167,7 +167,7 @@ KonfHub's own Declaration/Consent checkbox is **never pre-checked**. Dietary res
 7. If the ticket metadata is mapped, click **Continue to KonfHub — details prefilled**.
 8. Confirm the correct KonfHub ticket and verify that name, email, organization and AsianHOST Registration ID appear in the KonfHub form.
 9. Check any other required KonfHub fields manually, including consent. Do not pay until the bank and tax arrangements are approved.
-10. Repeat with IEEE Member, Non-IEEE Member, student and PhD Forum categories. After 15 November 2026, the original website correctly shows regular rates for the changing categories.
+10. Repeat with IEEE Member, Non-IEEE Member, student and PhD Forum categories. From 1 December 2026, the website shows regular rates for the changing categories.
 11. Try an unmatched ticket: the checkout should refuse to substitute the ₹2,000 widget.
 12. Check the original status lookup and invoice preview pages. They are still **demo-only**, not verified KonfHub records.
 
@@ -183,7 +183,7 @@ For all other categories, the integration deliberately does **not** show the ₹
 - Approved complimentary codes must be created and redeemed **inside KonfHub** with organizer-controlled usage limits.
 - The original website's paper-coverage validation is preserved. KonfHub must independently enforce ticket eligibility and the mandatory full-registration rule.
 - Supplementary ₹10,000 IEEE-to-Non-IEEE balance payments are **blocked** until an authorized KonfHub payment ticket is configured; the existing demo status UI still shows its original preview button.
-- The original deadline remains **15 November 2026 at 11:59 p.m. IST**. Pending early-rate orders are recalculated to regular rates on the new checkout after the cutoff.
+- The revised deadline is **30 November 2026 at 11:59 p.m. IST**. Pending early-rate orders are recalculated to regular rates on the new checkout after the cutoff.
 
 ## 12. Payment confirmation, webhooks and status lookup: not yet live
 

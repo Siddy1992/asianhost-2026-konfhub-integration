@@ -11,3 +11,5 @@ GITHUB UPDATE SAFETY:
 This complete ZIP is built from the most recent complete website package available in this conversation, with the revised policy pages integrated. If you have made newer changes to the live GitHub repository since that package (for example coupon logic or invoice features), do NOT replace the entire repository with this ZIP. Instead, use the accompanying POLICY_ONLY_PATCH ZIP: copy the four policy HTML pages and policy.css, then run apply_policy_links.py against your current GitHub files. This retains newer functionality.
 
 Before public launch, connect a secure payment gateway, server-side order verification, email delivery, a persistent database, and enforce the early-registration deadline on the server. The site is a frontend reference/demo, not a live payment processor.
+
+NOVEMBER 30 UPDATE: Read README_NOV30_KONFHUB_SETUP.md. The KonfHub screenshot shows an early ticket ending at 6 p.m. on Nov 30; update KonfHub to 11:59 p.m. IST to match the website before accepting payments.

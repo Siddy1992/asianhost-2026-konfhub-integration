@@ -43,15 +43,17 @@ def setup_page(browser, name, js, records=None, query_id=None, fake_time=None):
             script=script.replace("function goHome(id){location.href='index.html?view=confirmation&id='+encodeURIComponent(id)}", "function goHome(id){window.__navigated=id}")
     if fake_time:
         page.evaluate("t => {Date.now=()=>Date.parse(t)}",fake_time)
+    if js in ('app.js','checkout.js'):
+        page.add_script_tag(content=(P/'registration-config.js').read_text())
     page.add_script_tag(content=script)
     page.evaluate("document.dispatchEvent(new Event('DOMContentLoaded'))")
     return page,errors
 
 
 def run():
-    required=['index.html','app.js','styles.css','checkout.html','checkout.js','invoice.html','invoice.js','invoice.css','terms.html','refund.html','privacy.html','about-contact.html','policy.css','README.md','CHANGELOG.md','assets/asianhost-logo.png','assets/iitkgp-logo.png']
+    required=['index.html','app.js','registration-config.js','styles.css','checkout.html','checkout.js','invoice.html','invoice.js','invoice.css','terms.html','refund.html','privacy.html','about-contact.html','policy.css','README.md','CHANGELOG.md','assets/asianhost-logo.png','assets/iitkgp-logo.png']
     for f in required: assert (P/f).is_file(),f'Missing {f}'
-    for name in ['app.js','checkout.js','invoice.js']:
+    for name in ['registration-config.js','app.js','checkout.js','invoice.js']:
         subprocess.run(['node','--check',str(P/name)],check=True)
     for name in ['index.html','checkout.html','invoice.html','terms.html','refund.html','privacy.html','about-contact.html']:
         soup=BeautifulSoup((P/name).read_text(),'html.parser')
@@ -61,7 +63,7 @@ def run():
             target=url.split('?')[0].split('#')[0]
             assert (P/target).exists(),f'{name}: missing {target}'
     for path,term in [
-        ('checkout.html','id="coupon-code"'),('checkout.js','AH26-WAIVER-100'),
+        ('checkout.html','id="kh-prefill"'),('checkout.js','EARLY_AMOUNTS'),
         ('app.js','invoicePreviewAction(rec)'),('app.js','invoiceRequestAction(rec)'),
         ('index.html','other-paper-fields'),('app.js','REGULAR_START_MS'),
         ('invoice.html','id="print-invoice"'),('invoice.html','NOT AN OFFICIAL INVOICE'),
@@ -73,7 +75,7 @@ def run():
     with sync_playwright() as playwright:
         browser=playwright.chromium.launch(headless=True,executable_path='/usr/bin/chromium',args=['--no-sandbox','--disable-dev-shm-usage'])
         # Paid sample -> status -> invoice button; failed/pending must not have one.
-        page,errors=setup_page(browser,'index.html','app.js',fake_time='2026-11-15T23:59:59+05:30')
+        page,errors=setup_page(browser,'index.html','app.js',fake_time='2026-11-30T23:59:59+05:30')
         assert page.locator('#paper-select option').count()==14
         fees=page.evaluate('RATES.map(x=>({id:x.id,early:x.early,regular:x.regular,fixed:x.fixed}))')
         assert len(fees)==8,fees
@@ -82,6 +84,7 @@ def run():
             assert (f.get('early') if f.get('early') is not None else f.get('fixed'),f.get('regular') if f.get('regular') is not None else f.get('fixed'))==expected[f['id']],f
         assert page.locator('#fee-preview').inner_text()=='₹50,000'
         assert not page.locator('#early-btn').is_disabled()
+        assert page.locator('#regular-btn').is_disabled()
         page.locator('[data-view=status]').first.click()
         page.locator('[data-sample-id="AH26-SAMPLE-0001"]').click()
         assert 'Payment successful' in page.locator('#status-result').inner_text()
@@ -143,23 +146,14 @@ def run():
             page.close()
         print('PASS: invoice preview, watermark, print button and waived total')
 
-        # Coupon 100% bypass and no gateway action; invalid coupon.
-        order={**paid,'id':'AH26-ORDER-0001','status':'pending'}
-        page,errors=setup_page(browser,'checkout.html','checkout.js',records={order['id']:order},query_id=order['id'])
-        page.locator('#coupon-code').fill('BAD-CODE')
-        page.locator('#apply-coupon').click()
-        assert 'not recognized' in page.locator('#coupon-message').inner_text()
-        page.locator('#coupon-code').fill('AH26-WAIVER-100')
-        page.locator('#apply-coupon').click()
-        stored=page.evaluate("window.__getRecords()['AH26-ORDER-0001']")
-        assert stored['status']=='paid' and stored['amount']==0 and stored['paymentGatewaySkipped']
-        assert page.evaluate('window.__navigated')=='AH26-ORDER-0001'
-        assert not errors,errors
-        page.close()
-        print('PASS: coupon validation, ₹0 waiver and gateway bypass')
+        # Production-oriented checkout must not approve a public mock coupon.
+        assert 'AH26-WAIVER-100' not in (P/'checkout.js').read_text()
+        assert 'id="kh-prefill"' in (P/'checkout.html').read_text()
+        assert 'registration-config.js' in (P/'checkout.html').read_text()
+        print('PASS: no public mock coupon bypass in KonfHub checkout')
 
         # Manual paper entry and early deadline transition.
-        page,errors=setup_page(browser,'index.html','app.js',fake_time='2026-11-15T23:59:59+05:30')
+        page,errors=setup_page(browser,'index.html','app.js',fake_time='2026-11-30T23:59:59+05:30')
         page.locator('#paper-select').select_option('other')
         assert page.locator('#other-paper-fields').is_visible()
         page.locator('#continue-1').click()
@@ -170,7 +164,7 @@ def run():
         assert page.locator('#step2-panel').is_visible()
         assert not errors,errors
         page.close()
-        page,errors=setup_page(browser,'index.html','app.js',fake_time='2026-11-16T00:00:00+05:30')
+        page,errors=setup_page(browser,'index.html','app.js',fake_time='2026-12-01T00:00:00+05:30')
         assert page.locator('#early-btn').is_disabled()
         assert page.locator('#fee-preview').inner_text()=='₹60,000'
         assert 'closed' in page.locator('#registration-deadline-note').inner_text()

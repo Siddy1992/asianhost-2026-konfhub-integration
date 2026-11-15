@@ -14,7 +14,9 @@
   const PUBLIC_API = 'https://api.konfhub.com/event/url/' + EVENT_SLUG + '/tickets';
   const PUBLIC_SNAPSHOT = 'konfhub-public-tickets.json';
   const FALLBACK_WIDGET_ID = 'eaa9296e-ad76-4de9-bdc1-06a0c1ce1e1d';
-  const EARLY_CUTOFF = Date.parse('2026-11-16T00:00:00+05:30');
+  const EARLY_CUTOFF = (typeof window !== 'undefined' && window.AsianHOSTRegistrationConfig)
+    ? window.AsianHOSTRegistrationConfig.REGULAR_START_MS
+    : Date.parse('2026-12-01T00:00:00+05:30');
 
   const TICKETS = Object.freeze({
     'ieee:early': {names:['IEEE Member - Early'], amount:50000},
@@ -132,8 +134,13 @@
     const expected = expectedAmount(order);
     if (!key || expected == null) throw new Error('This registration type needs an organizer-approved KonfHub ticket.');
     if (Number(order.amount) !== expected) throw new Error('The selected fee does not match the published ticket rate. Please restart registration.');
-    if (order.period === 'early' && Date.now() >= EARLY_CUTOFF && !['indian-student','phd-intl','phd-indian'].includes(order.category)) {
-      throw new Error('The early-registration period has closed. Please use the regular ticket.');
+    if (!['indian-student','phd-intl','phd-indian'].includes(order.category)) {
+      if (order.period === 'early' && Date.now() >= EARLY_CUTOFF) {
+        throw new Error('Early registration closed on 30 November 2026. Please use the regular ticket.');
+      }
+      if (order.period === 'regular' && Date.now() < EARLY_CUTOFF) {
+        throw new Error('Regular registration starts on 1 December 2026. Please use the early ticket.');
+      }
     }
     const price = getPrice(ticket);
     if (price !== null && price !== expected) {
@@ -171,18 +178,24 @@
   async function getTickets(fetchImpl) {
     const fetcher = fetchImpl || (typeof fetch === 'function' ? fetch : null);
     if (!fetcher) return {tickets:[],source:'unavailable',errors:['Fetch is unavailable.']};
-    const errors = [];
-    for (const [source,url] of [['local',PUBLIC_SNAPSHOT],['KonfHub',PUBLIC_API]]) {
+    const errors = [], sources = [], byId = new Map();
+    // Prefer live public metadata. Merge any missing IDs from the organizer-maintained
+    // local snapshot so a partial snapshot cannot hide tickets returned by KonfHub.
+    for (const [source,url] of [['KonfHub',PUBLIC_API],['local',PUBLIC_SNAPSHOT]]) {
       try {
         const response = await fetcher(url,{cache:'no-store'});
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const data = await response.json();
         const tickets = extractTickets(data);
-        if (tickets.length) return {tickets,source,errors};
-        errors.push(source + ': no ticket records found.');
+        if (!tickets.length) { errors.push(source + ': no ticket records found.'); continue; }
+        sources.push(source);
+        for (const ticket of tickets) {
+          const id = getTicketId(ticket);
+          if (id != null && !byId.has(String(id))) byId.set(String(id),ticket);
+        }
       } catch(e) { errors.push(source + ': ' + (e?.message || String(e))); }
     }
-    return {tickets:[],source:'unavailable',errors};
+    return {tickets:Array.from(byId.values()),source:sources.join(' + ') || 'unavailable',errors};
   }
   function assess(order,tickets) {
     const key = ticketKey(order);
@@ -196,5 +209,5 @@
   }
   return {EVENT_SLUG,PUBLIC_API,PUBLIC_SNAPSHOT,FALLBACK_WIDGET_ID,EARLY_CUTOFF,
     TICKETS,CUSTOM_ALIASES,normalize,ticketKey,expectedAmount,extractTickets,
-    matchTicket,getTicketId,getTicketName,getTicketForms,buildPrefillUrl,getTickets,assess};
+    matchTicket,getTicketId,getTicketName,getTicketForms,getFormName,getPrice,buildPrefillUrl,getTickets,assess};
 });

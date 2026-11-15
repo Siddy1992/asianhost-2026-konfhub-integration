@@ -1,6 +1,9 @@
 'use strict';
 const assert = require('node:assert/strict');
 const KH = require('../konfhub-integration.js');
+const CONFIG = require('../registration-config.js');
+assert.equal(new Date(CONFIG.REGULAR_START_MS).toISOString(),'2026-11-30T18:30:00.000Z');
+assert.equal(KH.EARLY_CUTOFF,CONFIG.REGULAR_START_MS);
 function form(form_id,form_name,is_default=false,er_column_mapping='custom_forms',form_options=[]) {
   return {form_id,form_name,is_default,er_column_mapping,form_options};
 }
@@ -37,4 +40,15 @@ assert.equal(KH.assess({...order,category:'ieee',period:'regular',amount:60000},
 assert.equal(KH.assess({...order,kind:'balance',category:'balance',amount:10000},[ticket]).ready,false);
 const allKeys=Object.keys(KH.TICKETS);
 assert.equal(allKeys.length,13,'All 13 ticket variants must be represented');
-console.log('KonfHub mapping and prefill unit tests passed (13 variants).');
+// A previously regular-priced pending registration must be corrected in checkout.js.
+assert.equal(CONFIG.EARLY_AMOUNTS.ieee,50000);
+assert.equal(CONFIG.REGULAR_AMOUNTS.ieee,60000);
+const originalNow=Date.now;
+Date.now=()=>Date.parse('2026-11-30T23:59:59+05:30');
+const earlyOrder={...order,category:'ieee',period:'early',amount:50000};
+const earlyTicket={ticket_id:'test-ieee-early',ticket_name:'IEEE Member - Early',ticket_price:50000,forms:ticket.forms};
+assert.equal(KH.assess(earlyOrder,[earlyTicket]).ready,true);
+Date.now=()=>Date.parse('2026-12-01T00:00:00+05:30');
+assert.equal(KH.assess(earlyOrder,[earlyTicket]).ready,false);
+Date.now=originalNow;
+console.log('KonfHub mapping, prefill and 30 November cutoff unit tests passed (13 variants).');

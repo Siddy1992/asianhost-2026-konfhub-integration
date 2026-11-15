@@ -2,6 +2,8 @@
 
 This ZIP is the **complete editable source-code package** for the AsianHOST 2026 registration demo with the KonfHub integration. It is **not** a compiled or locked website. Every page can be edited with VS Code or a plain-text editor.
 
+**November 30 update:** The current registration calendar is in `registration-config.js`. Read `README_NOV30_KONFHUB_SETUP.md` before opening registration for payment.
+
 ## A. Start the website on your own computer
 
 1. Extract the ZIP completely.
@@ -25,7 +27,8 @@ This ZIP is the **complete editable source-code package** for the AsianHOST 2026
 |---|---|
 | `index.html` | Main registration page layout and content |
 | `styles.css` | Main site colors, fonts, spacing, responsive design |
-| `app.js` | Main form fields, registration rules, fees, deadline, client-side demo status |
+| `app.js` | Main form fields, registration rules, fees, client-side demo status |
+| `registration-config.js` | **Single editable deadline and price configuration** |
 | `checkout.html` | KonfHub checkout page structure |
 | `checkout.js` | Selecting ticket and navigating to KonfHub checkout |
 | `konfhub-integration.js` | Ticket mapping, supported prefilled participant fields, checkout URL construction |

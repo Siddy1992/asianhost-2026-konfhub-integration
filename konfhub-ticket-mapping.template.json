@@ -1,0 +1,83 @@
+{
+  "_instructions": "Copy only PUBLIC metadata into konfhub-public-tickets.json. Replace each null ticket_id with the real ID from KonfHub; do not publish private API keys or attendee data. Empty forms means registration-ID prefilling will not work.",
+  "tickets": [
+    {
+      "ticket_id": null,
+      "ticket_name": "IEEE Member - Early",
+      "ticket_price": 50000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "IEEE Member - Regular",
+      "ticket_price": 60000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "Non-IEEE Member - Early",
+      "ticket_price": 60000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "Non-IEEE Member - Regular",
+      "ticket_price": 70000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "IEEE Student - Early",
+      "ticket_price": 15000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "IEEE Student - Regular",
+      "ticket_price": 25000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "Non-IEEE Student - Early",
+      "ticket_price": 25000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "Non-IEEE Student - Regular",
+      "ticket_price": 35000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "IEEE Life Member - Early",
+      "ticket_price": 25000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "IEEE Life Member - Regular",
+      "ticket_price": 35000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "Indian Student - General",
+      "ticket_price": 2000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "PhD Forum - International",
+      "ticket_price": 15000,
+      "forms": []
+    },
+    {
+      "ticket_id": null,
+      "ticket_name": "PhD Forum - Indian",
+      "ticket_price": 5000,
+      "forms": []
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+> **Current KonfHub integration:** See `README_NOV30_KONFHUB_SETUP.md`. The original demo payment/coupon examples described later are historical; the new checkout does not simulate paid status or honor public sample coupon codes.
+
 # AsianHOST 2026 — Registration Website
 
 **Source code, local setup, complete registration workflow, fee schedule, coupons, policies, status lookup, sample invoice design, and production implementation guide**
@@ -11,8 +13,8 @@ This is the reference website for **AsianHOST 2026 — 11th Asian Hardware Orien
 | Source repository | https://github.com/Siddy1992/asianhost-2026-registration-demo |
 | IIT Kharagpur CEP programme | `IIT/CEP/CON/CON/2025-2026/CS/162` |
 | Registration currency | INR (Indian rupees) |
-| Early registration deadline | **15 November 2026, 11:59 p.m. IST** |
-| Regular / on-site fees begin | **16 November 2026, 12:00 a.m. IST** |
+| Early registration deadline | **30 November 2026, 11:59 p.m. IST** |
+| Regular / on-site fees begin | **1 December 2026, 12:00 a.m. IST** |
 | PhD Forum fees | Fixed, not subject to the early/regular deadline |
 | Refund request deadline | **5 December 2026, 11:59 p.m. IST** |
 
@@ -124,7 +126,7 @@ PhD Forum participants enter their submission/acceptance reference and choose a 
 
 ## 5. Registration categories, INR fees and deadlines
 
-| Category | Early (through 15 Nov) | Regular / on-site (from 16 Nov) | Eligibility |
+| Category | Early (through 30 Nov) | Regular / on-site (from 1 Dec) | Eligibility |
 |---|---:|---:|---|
 | IEEE Member | ₹50,000 | ₹60,000 | Full-paper coverage; IEEE verification |
 | Non-IEEE Member | ₹60,000 | ₹70,000 | Full-paper coverage |
@@ -135,7 +137,7 @@ PhD Forum participants enter their submission/acceptance reference and choose a 
 | PhD Forum – International | ₹15,000 | ₹15,000 | Fixed fee; forum eligibility |
 | PhD Forum – Indian | ₹5,000 | ₹5,000 | Fixed fee; forum eligibility |
 
-**Cutoff:** Early registration is open through **15 November 2026, 11:59 p.m. IST**. At **16 November 2026, 12:00 a.m. IST**, the Early option is disabled and Regular / On-site is automatically selected. The frontend rechecks the deadline on returning to a background tab, before creating an order, and when opening an unpaid early-fee checkout. Fixed-fee categories are unchanged.
+**Cutoff:** Early registration is open through **30 November 2026, 11:59 p.m. IST**. At **1 December 2026, 12:00 a.m. IST**, the Early option is disabled and Regular / On-site is automatically selected. The frontend rechecks the deadline on returning to a background tab, before creating an order, and when opening an unpaid early-fee checkout. Fixed-fee categories are unchanged.
 
 **Important:** JavaScript uses the participant's local device clock, which can be manipulated. In production, enforce the deadline and price with the server's trusted timestamp and an immutable fee quote/order. A pending early order cannot be paid at an expired rate after the cutoff unless explicitly authorized by the conference. Display the revised amount before collecting funds.
 
@@ -287,7 +289,7 @@ The production system should log send attempts, failures, delivery status and de
 |---|---|
 | `PAPER_LIST` | Authoritative accepted-paper dataset and manual exception review |
 | `RATES`, `currentAmount()` | Server-side INR fee schedule and signed/locked quotes |
-| `isEarlyRegistrationOpen()` | Trusted server clock in IST; cutoff at 16 Nov 00:00 |
+| `isEarlyRegistrationOpen()` | Trusted backend clock in IST; cutoff at 1 Dec 00:00 (frontend clock is advisory) |
 | `localStorage` records | Persistent database with unique registration IDs and transaction history |
 | `SAMPLE_COUPONS` | Private coupon registry, organizer authorization, expiry, limits, atomic redemption |
 | Mock payment buttons | Approved hosted gateway checkout, international cards, DCC if enabled |
@@ -331,16 +333,16 @@ Run these against the static demo and repeat the equivalent cases on the product
 | Choose IEEE Member | IEEE membership number required and flagged for verification |
 | Choose student category | Student declaration required |
 | Choose Indian-only category with non-India country | Submission blocked |
-| Before 16 Nov 2026 IST | Early option available; correct INR early fees |
-| At/after 16 Nov 2026 IST | Early disabled; regular/on-site fee selected |
+| Before 1 Dec 2026 00:00 IST | Early option available; correct INR early fees |
+| At/after 1 Dec 2026 00:00 IST | Early disabled; regular/on-site fee selected |
 | Pending early checkout opened after cutoff | Amount repriced to regular fee in demo |
 | Fixed-fee Indian/International PhD Forum | Amount unaffected by early cutoff |
 | Complete form and review | Unique demo ID and pending order created |
-| Apply invalid coupon | Error shown; fee unchanged; payment actions remain |
-| Apply `AH26-WAIVER-100` | Fee becomes ₹0, confirmed complimentary, gateway skipped |
-| Apply coupon to balance order | Rejected |
-| Simulate payment success | Confirmation page with registration ID and amount |
-| Simulate payment failure | Failure page and retry/status options |
+| Apply invalid coupon in archived original demo | Demo-only error; live KonfHub coupons must be configured in KonfHub |
+| Apply `AH26-WAIVER-100` in archived original demo | Demo-only; code is not accepted by the new KonfHub checkout |
+| Apply coupon to balance order | New KonfHub checkout does not support balance-payment coupons |
+| Simulate payment success in archived original demo | Demonstration only; KonfHub payment status requires backend verification |
+| Simulate payment failure in archived original demo | Demonstration only; not an actual KonfHub payment |
 | Lookup `AH26-SAMPLE-0001` | Successful sample record |
 | Lookup `AH26-SAMPLE-0002` | Failed sample record |
 | Lookup `AH26-SAMPLE-0003` | Pending sample record |

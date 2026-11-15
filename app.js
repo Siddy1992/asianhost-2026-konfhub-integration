@@ -2,9 +2,10 @@
 /* AsianHOST 2026: static UI prototype. No real transactions, accounts or mail delivery. */
 const STORAGE_KEY='asianhost2026_demo_registrations_inr_v2';
 const OTHER_PAPER_VALUE='other';
-// Early rates are available through 15 November 2026, 23:59:59 IST.
-// At 00:00 IST on 16 November, only regular/on-site rates remain available.
-const REGULAR_START_MS = Date.parse('2026-11-16T00:00:00+05:30');
+// Shared registration calendar (KonfHub must use the same dates and times).
+const REGISTRATION_CONFIG = window.AsianHOSTRegistrationConfig;
+if (!REGISTRATION_CONFIG) throw new Error('registration-config.js must load before app.js');
+const REGULAR_START_MS = REGISTRATION_CONFIG.REGULAR_START_MS;
 function isEarlyRegistrationOpen(){return Date.now()<REGULAR_START_MS;}
 
 const PAPER_LIST=[
@@ -51,18 +52,27 @@ function purposeLabel(){return state.purpose==='author'?'Paper author':state.pur
 function allowedRates(){if(state.purpose==='phd')return RATES.filter(x=>x.phd);if(state.purpose==='author'&&state.cover)return RATES.filter(x=>x.full);return RATES.filter(x=>!x.phd);}
 function synchronizeRegistrationPeriod(){
   const closed=!isEarlyRegistrationOpen();
-  const changed=closed && state.period!=='regular';
-  if(closed)state.period='regular';
+  // Do not allow a visitor to accidentally select a higher regular fee while early rates apply.
+  const expectedPeriod=closed?'regular':'early';
+  const changed=state.period!==expectedPeriod;
+  state.period=expectedPeriod;
   const early=$('early-btn'),regular=$('regular-btn');
   early.disabled=closed;
+  regular.disabled=!closed;
   early.setAttribute('aria-disabled',String(closed));
-  early.title=closed?'Early registration closed on 15 November 2026 (IST).':'Early registration closes 15 November 2026 at 11:59 p.m. IST.';
-  early.classList.toggle('active',!closed && state.period==='early');
-  regular.classList.toggle('active',state.period==='regular');
+  regular.setAttribute('aria-disabled',String(!closed));
+  early.title=closed
+    ?`Early registration closed on ${REGISTRATION_CONFIG.EARLY_CLOSE_DATE} (IST).`
+    :`Early registration closes ${REGISTRATION_CONFIG.EARLY_DEADLINE_TEXT}.`;
+  regular.title=closed
+    ?'Regular / on-site registration is now available.'
+    :`Regular / on-site rates apply from ${REGISTRATION_CONFIG.REGULAR_START_DATE}.`;
+  early.classList.toggle('active',!closed);
+  regular.classList.toggle('active',closed);
   const note=$('registration-deadline-note');
   note.textContent=closed
-    ?'Early registration closed on 15 November 2026. Only regular / on-site rates are available.'
-    :'Early registration closes 15 November 2026 at 11:59 p.m. IST. Regular / on-site rates apply from 16 November.';
+    ?`Early registration closed on ${REGISTRATION_CONFIG.EARLY_CLOSE_DATE}. Only regular / on-site rates are available.`
+    :`Early registration closes ${REGISTRATION_CONFIG.EARLY_DEADLINE_TEXT}. Regular / on-site rates apply from ${REGISTRATION_CONFIG.REGULAR_START_DATE}.`;
   note.classList.toggle('closed',closed);
   return changed;
 }
@@ -126,9 +136,9 @@ document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',(
 document.querySelectorAll('[data-purpose]').forEach(b=>b.onclick=()=>updatePurpose(b.dataset.purpose));
 $('cover-paper').onchange=e=>{state.cover=e.target.checked;renderRates()};
 $('paper-select').onchange=e=>{state.paperId=e.target.value;let p=PAPER_LIST.find(x=>x.id===state.paperId);$('paper-detail').classList.toggle('hidden',!p);$('other-paper-fields').classList.toggle('hidden',state.paperId!==OTHER_PAPER_VALUE);$('paper-detail').innerHTML=p?`<strong>Paper #${p.id} · ${escapeHTML(p.title)}</strong><p>Authors: ${escapeHTML(p.authors)}</p>`:''};
-$('early-btn').onclick=()=>{if(!isEarlyRegistrationOpen()){renderRates();showToast('Early registration closed on 15 November 2026.');return;}state.period='early';renderRates()};
-$('regular-btn').onclick=()=>{state.period='regular';renderRates()};
-// Re-check on return to a tab left open across the 15 November deadline.
+$('early-btn').onclick=()=>{if(!isEarlyRegistrationOpen()){renderRates();showToast('Early registration closed on '+REGISTRATION_CONFIG.EARLY_CLOSE_DATE+'.');return;}state.period='early';renderRates()};
+$('regular-btn').onclick=()=>{if(isEarlyRegistrationOpen()){renderRates();showToast('Regular rates begin '+REGISTRATION_CONFIG.REGULAR_START_DATE+'.');return;}state.period='regular';renderRates()};
+// Re-check on return to a tab left open across the 30 November deadline.
 window.addEventListener('focus',()=>{if(synchronizeRegistrationPeriod()){renderRates();if(state.step===3&&state.person)renderReview();}});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden && synchronizeRegistrationPeriod()){renderRates();if(state.step===3&&state.person)renderReview();}});
 $('country').onchange=updateConditionalFields;
