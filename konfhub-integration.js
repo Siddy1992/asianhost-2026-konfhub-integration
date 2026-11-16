@@ -174,72 +174,104 @@
     return {opens:formatIst(ticketTimeUtc(ticket,'start_timestamp')),
       closes:formatIst(ticketTimeUtc(ticket,'end_timestamp'))};
   }
+  // KonfHub form-prefill documentation (3 Nov 2026): predefined fields
+  // use er_column_mapping; custom forms use form_id even when they also have
+  // a non-custom er_column_mapping (e.g. our custom institution form).
+  // The registration form's country (type 15) and phone (type 5) fields have
+  // vendor-specific validation. Keep them independently testable.
+  const PREFILL_FIELD_KEYS=Object.freeze([
+    'institution','registrationId','purpose','paperId','paperTitle',
+    'phdReference','ieee','gstin','country','phone','city','billing'
+  ]);
+  function mappedField(forms,aliases) {
+    const f=findForm(forms,aliases);
+    if(!f)return null;
+    const key=isDefaultForm(f)?getFormMapping(f):getFormId(f);
+    if(key===null || key===undefined || key==='' || key==='custom_forms')return null;
+    return {key:String(key),form:f};
+  }
+  function normalizedPhone(p) {
+    const raw=String(p?.phone||'').trim();
+    if(!raw)return '';
+    const digits=raw.replace(/\D/g,'');
+    // A KonfHub Phone Number custom field presents its own country/dial code.
+    // For India, pass a 10-digit national number rather than +91 twice.
+    if(normalize(p?.country)==='india') {
+      const national=digits.length===12 && digits.startsWith('91')?digits.slice(2):digits;
+      return /^[6-9][0-9]{9}$/.test(national)?national:'';
+    }
+    // International phone-number formatting is not established by the public
+    // API. Do not guess dial-code parsing for a paid registration form.
+    return '';
+  }
+  function getPrefillFields(order,ticket) {
+    const p=order?.person||{};
+    const forms=getTicketForms(ticket);
+    const definitions=[
+      ['institution','Institution / Organisation',p.institution,
+        ['Institution / Organisation','Institution / Organization','Institution','Organisation','Organization']],
+      ['registrationId','AsianHOST Registration ID',order?.id,['AsianHOST Registration ID','AsianHOST Reference ID','Registration Reference ID']],
+      ['purpose','Registration Purpose',purposeLabel(order||{}),['Registration Purpose']],
+      ['paperId','Paper ID',order?.purpose==='author'?order.paperId:'',['Paper ID','Accepted Paper ID']],
+      ['paperTitle','Paper Title',order?.purpose==='author'?order.paperTitle:'',['Paper Title','Accepted Paper Title']],
+      ['phdReference','PhD Forum Reference',order?.purpose==='phd'?order.phdReference:'',['PhD Forum Reference','PhD Reference','PhD Forum Submission ID']],
+      ['ieee','IEEE Membership Number',p.ieee,['IEEE Membership Number','IEEE Member Number','IEEE Membership ID']],
+      ['gstin','GSTIN',p.gstin,['GSTIN','GST Number']],
+      ['country','Country',p.country,['Country','Country of Residence']],
+      ['phone','Phone Number',normalizedPhone(p),['Phone Number']],
+      ['city','City',p.city,['City']],
+      ['billing','Billing Name',p.billing,['Billing Name','Invoice Billing Name']]
+    ];
+    return definitions.map(([id,label,raw,aliases])=>{
+      const matched=mappedField(forms,aliases);
+      const value=String(raw??'').trim();
+      let reason='';
+      if(!matched)reason='Field not attached to this KonfHub ticket';
+      else if(!value)reason=id==='phone' && p.phone
+        ? 'Phone format not verified for this country; enter manually'
+        : 'No value supplied by the AsianHOST form';
+      else if(!valueAllowed(matched.form,value))reason='Value does not match KonfHub dropdown options';
+      return {id,label,key:matched?.key||null,value,ready:!reason,reason,
+        formType:matched?.form?.form_type??null,
+        risk:id==='phone'||id==='country'?'Specialized field — test separately':'Text or listed option'};
+    });
+  }
   // Modes: ticket = ticket ID only; safe = name and email only;
-  // full = mapped fields, excluding ambiguous duplicate profile phone keys.
-  // The default stays full for backwards compatibility with developer tooling.
-  function buildPrefillUrl(order, ticket, options = {}) {
-    const mode = options.mode || 'full';
-    if (!['ticket','safe','full'].includes(mode)) throw new Error('Unknown checkout prefill mode.');
-    if (!order?.person) throw new Error('Registrant details are missing.');
-    if (!ticket || getTicketId(ticket) == null) throw new Error('KonfHub ticket ID is unavailable.');
-    const key = ticketKey(order);
-    const expected = expectedAmount(order);
-    if (!key || expected == null) throw new Error('This registration type needs an organizer-approved KonfHub ticket.');
-    if (Number(order.amount) !== expected) throw new Error('The selected fee does not match the published ticket rate. Please restart registration.');
-    if (!['indian-student','phd-intl','phd-indian'].includes(order.category)) {
-      if (order.period === 'early' && Date.now() >= EARLY_CUTOFF) {
+  // full = name/email + selected mapped fields. A fields array allows a
+  // precise per-field isolation test, without modifying KonfHub's iframe.
+  function buildPrefillUrl(order,ticket,options={}) {
+    const mode=options.mode||'full';
+    if(!['ticket','safe','full'].includes(mode))throw new Error('Unknown checkout prefill mode.');
+    if(!order?.person)throw new Error('Registrant details are missing.');
+    if(!ticket||getTicketId(ticket)==null)throw new Error('KonfHub ticket ID is unavailable.');
+    const key=ticketKey(order),expected=expectedAmount(order);
+    if(!key||expected==null)throw new Error('This registration type needs an organizer-approved KonfHub ticket.');
+    if(Number(order.amount)!==expected)throw new Error('The selected fee does not match the published ticket rate. Please restart registration.');
+    if(!['indian-student','phd-intl','phd-indian'].includes(order.category)) {
+      if(order.period==='early'&&Date.now()>=EARLY_CUTOFF)
         throw new Error('Early registration closed on 30 November 2026. Please use the regular ticket.');
-      }
-      if (order.period === 'regular' && Date.now() < EARLY_CUTOFF) {
+      if(order.period==='regular'&&Date.now()<EARLY_CUTOFF)
         throw new Error('Regular registration starts on 1 December 2026. Please use the early ticket.');
-      }
     }
     const availabilityError=ticketAvailabilityProblem(ticket);
-    if (availabilityError) throw new Error(availabilityError);
-    const price = getPrice(ticket);
-    if (price !== null && price !== expected) {
-      throw new Error('KonfHub ticket face value (' + price + ') differs from the selected fee (' + expected + '). Check the ticket configuration.');
-    }
-    const url = new URL('https://konfhub.com/checkout/' + EVENT_SLUG);
+    if(availabilityError)throw new Error(availabilityError);
+    const price=getPrice(ticket);
+    if(price!==null&&price!==expected)
+      throw new Error('KonfHub ticket face value ('+price+') differs from the selected fee ('+expected+'). Check the ticket configuration.');
+    const url=new URL('https://konfhub.com/checkout/'+EVENT_SLUG);
     url.searchParams.set('ticketId',String(getTicketId(ticket)));
-    // First diagnostic: ticket-only checkout isolates KonfHub's profile update
-    // from all user-controlled URL parameters. Never send PII in this mode.
-    if (mode === 'ticket') return url.toString();
-    const p = order.person;
-    // Safest automated prefill: use only KonfHub's basic documented fields.
-    // The full mode is optional because an organizer observed a KonfHub
-    // "Error updating user profile" toast after the legacy all-field prefill.
-    for (const [k,v] of Object.entries({name:p.name, email_id:p.email})) {
-      if (v) url.searchParams.set(k,String(v));
+    if(mode==='ticket')return url.toString();
+    if(order.person.name)url.searchParams.set('name',String(order.person.name));
+    if(order.person.email)url.searchParams.set('email_id',String(order.person.email));
+    if(mode==='safe')return url.toString();
+    const selected=options.fields===undefined?new Set(PREFILL_FIELD_KEYS):new Set(options.fields);
+    for(const field of getPrefillFields(order,ticket)) {
+      if(!selected.has(field.id)||!field.ready)continue;
+      // A custom form's numeric ID is always the URL key, even when the
+      // field has an er_column_mapping such as organisation or country.
+      url.searchParams.set(field.key,field.value);
     }
-    if (mode === 'safe') return url.toString();
-    if (p.institution) url.searchParams.set('organisation',String(p.institution));
-    const forms = getTicketForms(ticket);
-    // Do not send the same number as BOTH whatsapp_number and phone_number.
-    // For an organizer-created Phone Number form, use its exact form_id.
-    // KonfHub's acceptance of this custom-field prefill requires live testing.
-    const phone = String(p.phone || '').replace(/[\s().-]/g,'');
-    const phoneForm = findForm(forms,['Phone Number']);
-    if (/^\+?[0-9]{8,15}$/.test(phone) && phoneForm && getFormId(phoneForm) != null) {
-      url.searchParams.set(String(getFormId(phoneForm)),phone);
-    }
-    const custom = {
-      registrationId:order.id, purpose:purposeLabel(order),
-      paperId:order.paperId, paperTitle:order.paperTitle,
-      phdReference:order.phdReference, ieee:p.ieee,
-      country:p.country, city:p.city, billing:p.billing, gstin:p.gstin
-    };
-    for (const [key,value] of Object.entries(custom)) {
-      if (value == null || value === '') continue;
-      const form = findForm(forms,CUSTOM_ALIASES[key] || []);
-      if (!form || !valueAllowed(form,String(value))) continue;
-      // Custom forms use form_id; predefined fields use er_column_mapping.
-      const fieldKey = isDefaultForm(form) ? getFormMapping(form) : getFormId(form);
-      if (fieldKey != null && String(fieldKey) !== '' && String(fieldKey) !== 'custom_forms') {
-        url.searchParams.set(String(fieldKey),String(value));
-      }
-    }
-    // Never pre-accept the separate KonfHub consent checkbox.
+    // Consent is NEVER pre-accepted, and no document uploads are passed.
     return url.toString();
   }
   async function getTickets(fetchImpl) {
@@ -283,7 +315,7 @@
     catch(e) { return {ready:false,key,ticket,reason:e.message}; }
   }
   return {EVENT_SLUG,PUBLIC_API,PUBLIC_SNAPSHOT,FALLBACK_WIDGET_ID,EARLY_CUTOFF,
-    TICKETS,CUSTOM_ALIASES,normalize,ticketKey,expectedAmount,extractTickets,
+    TICKETS,CUSTOM_ALIASES,PREFILL_FIELD_KEYS,getPrefillFields,normalize,ticketKey,expectedAmount,extractTickets,
     matchTicket,getTicketId,getTicketName,getTicketForms,getFormName,getPrice,
     ticketTimeUtc,formatIst,ticketTimeSummary,ticketAvailabilityProblem,ticketScheduleProblem,
     buildPrefillUrl,getTickets,assess};

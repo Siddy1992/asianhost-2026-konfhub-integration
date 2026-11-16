@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d1f41">
+<title>Full prefill diagnostic | AsianHOST 2026</title>
+<link rel="icon" href="assets/asianhost-logo.png"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="konfhub-checkout.css">
+<style>
+.lab{max-width:1000px;margin:32px auto 70px;padding:0 22px;color:#0d2447}
+.lab h1{font-size:clamp(24px,3vw,35px);margin:8px 0 12px}
+.lab p{line-height:1.65}
+.lab-intro{display:flex;gap:14px;align-items:center;margin-bottom:20px}
+.lab-intro img{width:46px;height:46px;object-fit:contain}
+.lab-panel{background:white;border:1px solid #d9e2ef;border-radius:15px;padding:24px;margin-top:16px;box-shadow:0 5px 18px #10233e0a}
+.lab-note{background:#fff6e6;border:1px solid #f0ca7c;border-radius:10px;padding:14px 18px;color:#6c4211;margin:14px 0}
+.lab-status{background:#edf4ff;border:1px solid #bfd3f2;border-radius:9px;padding:12px 16px;margin:12px 0}
+.lab-fields{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0}
+.lab-fields th,.lab-fields td{padding:11px 10px;border-bottom:1px solid #e8edf5;text-align:left;vertical-align:top}
+.lab-fields th{background:#f0f4fa;color:#273f61}
+.lab-fields input[type=checkbox]{width:18px;height:18px;accent-color:#0b3774;cursor:pointer}
+.lab-fields small{display:block;color:#6c7b91;margin-top:3px}
+.lab-fields .warn{color:#9a5a00}.lab-fields .missing{color:#a13333}
+.lab-actions{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}
+.lab-btn{border:1px solid #15467d;border-radius:8px;background:#fff;color:#0b376e;padding:11px 15px;font:600 14px inherit;cursor:pointer}
+.lab-btn.primary{background:#082d61;color:white}
+.lab-btn:hover{filter:brightness(.95)}
+.lab-btn:disabled{opacity:.45;cursor:not-allowed}
+.lab-step{padding:9px 0;border-bottom:1px solid #e9eef6}
+.lab-muted{font-size:13px;color:#65738c}
+.lab-foot{font-size:13px;color:#65738c;margin-top:25px}
+@media(max-width:650px){.lab-panel{padding:14px}.lab-fields{font-size:12px}.lab-fields th,.lab-fields td{padding:9px 5px}}
+</style>
+<script defer src="registration-config.js"></script>
+<script defer src="konfhub-integration.js"></script>
+<script defer src="prefill-lab.js"></script>
+</head><body class="checkout-body">
+<div class="top-ribbon"><span>ASIANHOST 2026 · FULL PREFILL DIAGNOSTIC</span><span>11–13 DECEMBER 2026 · KOLKATA</span></div>
+<main class="lab">
+<a class="back-link" id="lab-back" href="index.html">← Return to registration</a>
+<div class="lab-intro"><img src="assets/asianhost-logo.png" alt="AsianHOST logo"><div><div class="section-tag">KONFHUB · FIELD-LEVEL TESTING</div><h1>Identify the full-prefill validation error</h1></div></div>
+<p>Basic name/email prefill is known to reach KonfHub checkout. This page lets you add one mapped field at a time and determine which value triggers <strong>“Error updating user profile”</strong>.</p>
+<div class="lab-note"><strong>Diagnostic only — no payment.</strong> Use a real, valid attendee profile that you control. Open each test in a new KonfHub tab and stop at the payment-selection page. If results vary, clear the KonfHub session between tests. The URL contains participant information; do not share unredacted links or screenshots of the address bar.</div>
+<section class="lab-panel"><h2>Selected registration</h2><div class="lab-status" id="lab-status" role="status">Loading registration and public ticket metadata…</div><p class="lab-muted" id="lab-ticket"></p></section>
+<section class="lab-panel" id="lab-controls" hidden>
+<h2>Choose fields to transfer</h2><p><strong>Name and email are always included.</strong> Every other field uses the exact mapping key from the selected KonfHub ticket. Missing or invalid values are not sent.</p>
+<table class="lab-fields"><thead><tr><th>Include</th><th>AsianHOST field</th><th>KonfHub mapping</th><th>Availability</th></tr></thead><tbody id="lab-field-rows"></tbody></table>
+<div class="lab-actions">
+<button type="button" class="lab-btn" data-preset="basic">1 · Basic only</button>
+<button type="button" class="lab-btn" data-preset="text">2 · All text/option fields</button>
+<button type="button" class="lab-btn" data-preset="country">3 · Text + country</button>
+<button type="button" class="lab-btn" data-preset="phone">4 · Text + phone</button>
+<button type="button" class="lab-btn" data-preset="all">5 · All mapped fields</button>
+</div>
+<p class="lab-muted" id="lab-selection"></p>
+<button type="button" class="lab-btn primary" id="lab-open">Open KonfHub with selected fields ↗</button>
+<p class="lab-muted">Each click opens the KonfHub ticket in a new tab. These tests do not register an attendee, verify a payment, or change AsianHOST registration status.</p>
+</section>
+<section class="lab-panel"><h2>Recommended test sequence</h2>
+<div class="lab-step"><strong>Test A:</strong> Basic only — already confirmed working. This is your control.</div>
+<div class="lab-step"><strong>Test B:</strong> All text/option fields — checks institution, registration ID, purpose and applicable paper/IEEE fields.</div>
+<div class="lab-step"><strong>Test C:</strong> Text + country — isolates the KonfHub country selector.</div>
+<div class="lab-step"><strong>Test D:</strong> Text + phone — isolates phone validation. Indian numbers are sent as 10 national digits, without a duplicate +91 prefix.</div>
+<div class="lab-step"><strong>Test E:</strong> All mapped fields — attempt only after B, C and D succeed individually.</div>
+<p class="lab-muted">If B fails, deselect all extra fields, then enable Institution, Registration ID, Registration Purpose and other fields one by one. Record the first failing field and its numeric mapping ID, but do not share participant data.</p></section>
+<section class="lab-panel"><h2>What cannot be automatically transferred yet?</h2><p>The original AsianHOST form does not collect dietary preference, so it cannot be prefilled. KonfHub's declaration/consent must be accepted by the participant, never preselected. The current ticket metadata does not show a separate PhD Forum reference field or City/Billing Name on every ticket; fields absent from a selected ticket are skipped.</p><p>Some KonfHub tickets mark paper fields or IEEE membership as mandatory even for registrations where they may not apply. Adjust those requirements in <strong>Event Info → Forms</strong> for the relevant tickets.</p></section>
+<p class="lab-foot">This tool uses only public KonfHub ticket metadata and the pending registration saved in this browser. It does not access KonfHub private APIs.</p>
+</main><footer class="checkout-policy-links"><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">Refund &amp; Cancellation</a><a href="privacy.html">Privacy Policy</a><a href="about-contact.html">About &amp; Contact</a></footer>
+</body></html>

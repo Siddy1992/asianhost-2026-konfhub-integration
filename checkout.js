@@ -110,9 +110,12 @@ async function init() {
     const ticketOnly=K.buildPrefillUrl(order,choice.ticket,{mode:'ticket'});
     const link=$('kh-prefill');link.href=basic;link.hidden=false;link.target='_blank';
     const full=$('kh-prefill-full');full.href=choice.url;full.hidden=false;full.target='_blank';
+    const textFields=K.PREFILL_FIELD_KEYS.filter(x=>x!=='phone'&&x!=='country');
+    const textPrefill=$('kh-text-prefill');textPrefill.href=K.buildPrefillUrl(order,choice.ticket,{mode:'full',fields:textFields});textPrefill.hidden=false;
+    const lab=$('kh-prefill-lab');lab.href='prefill-lab.html?id='+encodeURIComponent(order.id);lab.hidden=false;
     const fallback=$('kh-ticket-only');fallback.href=ticketOnly;fallback.hidden=false;fallback.target='_blank';
     $('kh-profile-help').hidden=false;
-    $('kh-explanation').textContent='Basic prefill sends name and email only. Full prefill attempts the mapped participant fields, but may be rejected by KonfHub; ticket-only sends no participant details. Always check and correct the form on KonfHub. No option updates your browser-local payment status.';
+    $('kh-explanation').textContent='Basic prefill has been observed working. Text-field prefill uses the correct KonfHub custom form IDs; Full also includes country and Indian national-format phone if available. Test each additional field to isolate any vendor-side validation errors. Consent is never preselected and payment status is never updated here.';
     if(/@(example\.(org|com|net)|test\.invalid)$/i.test(String(order.person.email||''))) {
       showWarnings([...(Array.from($('kh-warnings').querySelectorAll('li')).map(x=>x.textContent)),
         'This is a fictional example email address. Do not use sample identities for live registration or payment.']);
