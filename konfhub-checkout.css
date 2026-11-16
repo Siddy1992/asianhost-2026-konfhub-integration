@@ -24,3 +24,52 @@
 .kh-pill { display: inline-block; background: #eaf0fb; color: #163f82; border-radius: 100px; padding: 5px 10px; font-size: 12px; font-weight: 700; }
 .kh-privacy { font-size: 12px; line-height: 1.5; color: #53647c; margin-top: 15px; }
 @media (max-width: 850px) { .kh-checkout-grid { grid-template-columns: 1fr; } .kh-widget iframe { min-height: 1150px; } }
+
+/* November 16 redesign: checkout hierarchy, ticket provenance, and validation. */
+.checkout-body { background: #f1f4fa; }
+.checkout-wrap { max-width: 1130px; margin-left: auto; margin-right: auto; }
+.checkout-intro { margin-bottom: 22px; }
+.checkout-intro h1 { letter-spacing: -.025em; }
+.kh-stage-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 22px; }
+.kh-stage { display:flex;align-items:center;gap:9px;border:1px solid #dae3f0;border-radius:10px;padding:10px 12px;background:#fff;color:#586980;font-size:12px;font-weight:700; }
+.kh-stage span { width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:#e8edf6;color:#244577;flex-shrink:0; }
+.kh-stage-done span { background:#e4f6ed;color:#19744c; }
+.kh-stage-current { border-color:#92b0df;background:#edf4ff;color:#113e7b; }
+.kh-stage-current span { background:#113e7b;color:white; }
+.kh-top-alert { margin:0 0 24px; }
+.kh-checkout-grid { grid-template-columns:minmax(285px,.9fr) minmax(360px,1.22fr);gap:20px; }
+.kh-summary-panel { position:sticky;top:24px; }
+.kh-panel { padding:28px; border:1px solid #dbe4f0;box-shadow:0 12px 32px rgba(16,38,78,.06); }
+.kh-panel-heading { display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px; }
+.kh-panel-heading h2 { margin:3px 0 0; font-size:22px; }
+.kh-eyebrow { color:#426ca5;font-size:10px;letter-spacing:.13em;font-weight:800; }
+.kh-summary td { padding:12px 0;font-size:13px; }
+.kh-summary td:first-child { color:#526783; }
+.kh-summary td:last-child { max-width:200px; }
+.kh-fee-box { margin:20px 0 12px;padding:18px;border-radius:12px;background:#0d244b;color:#fff;display:flex;flex-direction:column;gap:4px; }
+.kh-fee-box span { color:#c4d3ec;font-size:12px; }
+.kh-fee-box strong { font-size:32px;letter-spacing:-.025em; }
+.kh-fee-box small { color:#d4e1f6;font-size:11px;line-height:1.4; }
+.kh-text-button { background:none;border:0;padding:6px 0;color:#0a4b9a;font:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:underline; }
+.kh-copy-result { font-size:12px;color:#176c47;margin-left:10px; }
+.kh-divider { height:1px;background:#e4ebf4;margin:14px 0; }
+.kh-match-details { display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;background:#f5f8fd;border:1px solid #e1e9f5;border-radius:12px;margin:16px 0; }
+.kh-match-details[hidden],.kh-warnings[hidden] { display:none; }
+.kh-match-details div { min-width:0;display:flex;flex-direction:column;gap:5px; }
+.kh-match-details span { color:#60738e;font-size:11px; }
+.kh-match-details strong { color:#152d55;font-size:13px;overflow-wrap:anywhere; }
+.kh-match-details div:last-child { grid-column:1/-1; }
+.kh-warnings { border-left:4px solid #c68b20;background:#fff8ea;padding:14px 17px;border-radius:0 10px 10px 0;margin:16px 0;color:#674b1b;font-size:12px;line-height:1.5; }
+.kh-warnings ul { padding-left:18px;margin:9px 0 0; }
+.kh-warnings li+li { margin-top:7px; }
+.kh-actions .kh-button { font-size:13px; }
+.kh-next-steps { margin-top:20px;border-top:1px solid #e6edf5;padding-top:18px; }
+.kh-next-steps h3 { font-size:15px;margin-bottom:10px; }
+.kh-next-steps ol { margin:0;padding-left:20px;color:#52647f;font-size:12px;line-height:1.7; }
+.kh-next-steps li+li { margin-top:4px; }
+.kh-bottom-help { text-align:center;color:#5c6e85;font-size:12px;margin:25px 0; }
+.kh-bottom-help a { color:#17498b;text-decoration:underline; }
+.checkout-policy-links { max-width:1100px;margin:22px auto 30px;padding:0 20px;display:flex;justify-content:center;flex-wrap:wrap;gap:12px;font-size:12px; }
+.checkout-policy-links a { color:#5b6e89;text-decoration:underline; }
+@media(max-width:900px) { .kh-stage-strip{grid-template-columns:1fr 1fr}.kh-checkout-grid{grid-template-columns:1fr}.kh-summary-panel{position:static} }
+@media(max-width:520px) { .kh-stage{font-size:10px;padding:8px}.kh-panel{padding:19px}.kh-match-details{grid-template-columns:1fr}.kh-match-details div:last-child{grid-column:auto}.kh-fee-box strong{font-size:27px} }

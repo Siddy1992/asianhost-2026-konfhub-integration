@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d1f41">
-  <title>KonfHub Registration Checkout | AsianHOST 2026</title>
+  <meta name="description" content="AsianHOST 2026 registration review and KonfHub checkout preview.">
+  <title>Registration checkout | AsianHOST 2026</title>
   <link rel="icon" type="image/png" href="assets/asianhost-logo.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="konfhub-checkout.css">
@@ -14,42 +15,55 @@
 </head>
 <body class="checkout-body">
   <div class="top-ribbon"><span class="top-ribbon__left"><span class="pulse"></span> ASIANHOST 2026 · REGISTRATION CHECKOUT</span><span>11–13 DECEMBER 2026 · KOLKATA</span></div>
-  <div class="checkout-header"><a href="index.html" class="back-link">← Return to registration</a><span class="checkout-secure">◈ KonfHub ticketing</span></div>
+  <div class="checkout-header"><a href="index.html" class="back-link">← Return to registration</a><span class="checkout-secure">KonfHub hosted checkout</span></div>
   <main class="checkout-wrap">
-    <div class="checkout-intro"><img src="assets/asianhost-logo.png" alt="AsianHOST logo"><div><div class="section-tag">PAYMENT</div><h1>Complete conference registration</h1><p>Your selected category and participant details will be transferred to KonfHub's secure checkout where supported.</p></div></div>
-    <div class="kh-notice warning"><strong>Integration demonstration:</strong> This is a separate GitHub Pages prototype. Do not complete a live payment until SRIC has approved the settlement account, taxes, gateway charges, and the organizers have activated live registration. KonfHub, not browser storage, is authoritative for ticket/payment confirmation.</div>
+    <div class="checkout-intro"><img src="assets/asianhost-logo.png" alt="AsianHOST logo"><div><div class="section-tag">REGISTRATION · STEP 4 OF 4</div><h1>Review and continue to KonfHub</h1><p>Your registration category is matched to the corresponding KonfHub ticket. Supported details are sent for prefill; please verify them on the KonfHub form.</p></div></div>
+    <div class="kh-stage-strip" aria-label="Checkout progress">
+      <div class="kh-stage kh-stage-done"><span>1</span> Select category</div>
+      <div class="kh-stage kh-stage-done"><span>2</span> Participant details</div>
+      <div class="kh-stage kh-stage-done"><span>3</span> Review</div>
+      <div class="kh-stage kh-stage-current"><span>4</span> KonfHub checkout</div>
+    </div>
+    <div class="kh-notice warning kh-top-alert"><strong>Integration preview — payments are not verified here.</strong> This is a GitHub Pages prototype. Before live payments, SRIC and the organizers must approve settlement, GST, charges and activation. Your browser-generated registration ID is not a confirmed ticket. Only KonfHub and a verified backend can confirm payment.</div>
     <div class="kh-checkout-grid">
-      <section class="kh-panel" aria-labelledby="kh-summary-title">
-        <h2 id="kh-summary-title">Registration summary</h2>
+      <section class="kh-panel kh-summary-panel" aria-labelledby="kh-summary-title">
+        <div class="kh-panel-heading"><div><div class="kh-eyebrow">YOUR DETAILS</div><h2 id="kh-summary-title">Registration summary</h2></div><span class="kh-pill">Pending</span></div>
         <table class="kh-summary">
           <tr><td>Registration ID</td><td id="kh-order">—</td></tr>
           <tr><td>Registrant</td><td id="kh-person">—</td></tr>
           <tr><td>Email</td><td id="kh-email">—</td></tr>
           <tr><td>Category</td><td id="kh-category">—</td></tr>
           <tr><td>Registration period</td><td id="kh-period">—</td></tr>
-          <tr><td>Fee (INR)</td><td id="kh-amount">—</td></tr>
         </table>
-        <p class="kh-privacy">KonfHub's documented form-prefill method transfers participant details in checkout URL parameters. Such parameters may appear in browser history and server logs. Do not include passports, bank information, or other sensitive documents. Participants must review the KonfHub form before submitting.</p>
-        <p class="kh-details">Early rates apply through 30 November 2026, 11:59 p.m. IST. Regular rates apply from 1 December 2026.</p>
-        <p class="kh-details">The displayed fee is the published registration fee. KonfHub's final checkout may add taxes or platform charges depending on organizer configuration. Confirm the total before paying.</p>
+        <div class="kh-fee-box"><span>Published registration fee</span><strong id="kh-amount">—</strong><small>INR · GST and platform charges may affect the final KonfHub total</small></div>
+        <button id="kh-copy-id" class="kh-text-button" type="button">Copy registration ID</button><span id="kh-copy-result" class="kh-copy-result" aria-live="polite"></span>
+        <div class="kh-divider"></div>
+        <p class="kh-details"><strong>Early registration:</strong> through 30 November 2026, 11:59 p.m. IST. <strong>Regular registration:</strong> from 1 December 2026.</p>
+        <p class="kh-privacy">Prefill uses URL parameters that may appear in browser history and service logs. Do not include passports, bank details, payment information or other sensitive documents in the checkout URL.</p>
       </section>
       <section class="kh-panel" aria-labelledby="kh-action-title">
-        <h2 id="kh-action-title">KonfHub checkout</h2>
-        <span class="kh-pill">Ticket-specific checkout</span>
-        <p class="kh-status" id="kh-loading" role="status">Looking up the correct ticket and form fields…</p>
+        <div class="kh-panel-heading"><div><div class="kh-eyebrow">HOSTED TICKETING</div><h2 id="kh-action-title">KonfHub checkout</h2></div><span class="kh-pill">13-ticket mapping</span></div>
+        <p class="kh-status" id="kh-loading" role="status">Checking ticket metadata and selecting the correct category…</p>
         <div class="kh-notice" id="kh-message" role="status" hidden></div>
+        <div id="kh-match-details" class="kh-match-details" hidden>
+          <div><span>Selected KonfHub ticket</span><strong id="kh-ticket-name">—</strong></div>
+          <div><span>Ticket ID</span><strong id="kh-ticket-id">—</strong></div>
+          <div><span>Ticket data source</span><strong id="kh-data-source">—</strong></div>
+          <div><span>Ticket availability</span><strong id="kh-ticket-availability">—</strong></div>
+        </div>
+        <div id="kh-warnings" class="kh-warnings" aria-live="polite" hidden></div>
         <div class="kh-actions">
-          <a id="kh-prefill" class="kh-button" href="#" rel="noopener noreferrer" hidden>Continue to KonfHub — details prefilled ↗</a>
-          <a id="kh-event" class="kh-button kh-button-secondary" href="https://konfhub.com/asian-host-ticketing" target="_blank" rel="noopener noreferrer" hidden>View KonfHub event page ↗</a>
+          <a id="kh-prefill" class="kh-button" href="#" rel="noopener noreferrer" hidden>Preview prefilled KonfHub checkout ↗</a>
+          <a id="kh-event" class="kh-button kh-button-secondary" href="https://konfhub.com/asian-host-ticketing" target="_blank" rel="noopener noreferrer" hidden>Open KonfHub event page ↗</a>
         </div>
-        <p class="kh-details" id="kh-explanation">Your registration will remain pending in this browser. Completing the KonfHub checkout does not automatically update the demo status page.</p>
-        <div id="kh-widget-wrap" class="kh-widget" hidden>
-          <iframe src="https://konfhub.com/widget/id/eaa9296e-ad76-4de9-bdc1-06a0c1ce1e1d" title="Indian Student – General KonfHub registration widget (manual entry)" width="100%" height="1000" allow="payment"></iframe>
-        </div>
-        <p class="kh-details" id="kh-widget-note" hidden>This fallback iframe is configured ONLY for Indian Student – General (₹2,000). It does not prefill your AsianHOST form details. Enter the registration ID shown at left into KonfHub manually.</p>
+        <p class="kh-details" id="kh-explanation">This page does not collect payment or update payment status. Your registration remains pending until confirmed independently.</p>
+        <div class="kh-next-steps"><h3>Before submitting on KonfHub</h3><ol><li>Confirm the ticket category and the final amount including taxes.</li><li>Check name, email, institution, phone, registration ID, and applicable paper/IEEE fields.</li><li>Read and accept KonfHub's declaration yourself; consent is never preselected.</li><li>Keep the official KonfHub booking/transaction confirmation for reconciliation.</li></ol></div>
+        <div id="kh-widget-wrap" class="kh-widget" hidden><iframe src="https://konfhub.com/widget/id/eaa9296e-ad76-4de9-bdc1-06a0c1ce1e1d" title="Indian Student – General KonfHub registration widget (manual entry)" width="100%" height="1000" allow="payment" loading="lazy"></iframe></div>
+        <p class="kh-details" id="kh-widget-note" hidden>This manual iframe is configured only for Indian Student – General (₹2,000). It does not transfer the website's participant details. Enter the registration ID shown on the left manually.</p>
       </section>
     </div>
+    <p class="kh-bottom-help">Need to check a previous registration? <a href="index.html?view=status">Open the demonstration status lookup</a>. Browser-local status is not an authoritative KonfHub payment record.</p>
   </main>
-  <div class="checkout-policy-links" style="max-width:1100px;margin:25px auto;padding:0 20px;color:#5c6c85;text-align:center"><div class="policy-links" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;font-size:12px"><a style="color:inherit;text-decoration:underline" href="terms.html">Terms &amp; Conditions</a><a style="color:inherit;text-decoration:underline" href="refund.html">Refund &amp; Cancellation</a><a style="color:inherit;text-decoration:underline" href="privacy.html">Privacy Policy</a><a style="color:inherit;text-decoration:underline" href="about-contact.html">About &amp; Contact</a></div></div>
+  <footer class="checkout-policy-links"><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">Refund &amp; Cancellation</a><a href="privacy.html">Privacy Policy</a><a href="about-contact.html">About &amp; Contact</a></footer>
 </body>
 </html>

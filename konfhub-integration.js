@@ -84,11 +84,10 @@
         if (!seen.has(k)) { seen.add(k); result.push(node); }
         return;
       }
-      for (const [k,v] of Object.entries(node)) {
-        if (v && typeof v === 'object' && /^(data|result|tickets|items|records|payload|event|ticket_data|ticket_details|list)$/i.test(k)) {
-          walk(v,depth+1);
-        }
-      }
+      // KonfHub's real endpoint returns {categorized:[],uncategorized:[...]}.
+      // Traverse nested containers generically; only objects with ticket_id and
+      // ticket_name are collected, so nested form records are not mistaken for tickets.
+      for (const v of Object.values(node)) if (v && typeof v === 'object') walk(v,depth+1);
     }
     walk(payload,0);
     return result;
@@ -100,7 +99,14 @@
     return tickets.find(t => aliases.includes(normalize(getTicketName(t)))) || null;
   }
   function getFormId(f) { return f?.form_id ?? f?.formId ?? null; }
-  function getFormName(f) { return f?.form_name ?? f?.formName ?? f?.name ?? ''; }
+  function getFormName(f) {
+    // The actual KonfHub form_name values are HTML paragraphs, not plain labels.
+    const raw = String(f?.form_name ?? f?.formName ?? f?.name ?? '');
+    return raw.replace(/<[^>]*>/g,' ')
+      .replace(/&nbsp;|&#160;/gi,' ')
+      .replace(/&amp;/gi,'&').replace(/&lt;/gi,'<').replace(/&gt;/gi,'>')
+      .replace(/\s+/g,' ').trim();
+  }
   function getFormMapping(f) { return f?.er_column_mapping ?? f?.erColumnMapping ?? ''; }
   function isDefaultForm(f) { return f?.is_default === true || f?.is_default === 1 || f?.is_default === 'true'; }
   function findForm(forms, aliases) {
@@ -127,6 +133,47 @@
     return order.purpose === 'author' ? 'Paper Author' :
       order.purpose === 'phd' ? 'PhD Forum Participant' : 'General Participant';
   }
+  // KonfHub's timestamps in the supplied API snapshot are UTC without a timezone
+  // suffix (e.g. 12:30 UTC is 18:00 IST, matching the dashboard screenshot).
+  function ticketTimeUtc(ticket,field) {
+    const value=ticket?.[field];
+    if (!value || typeof value !== 'string') return null;
+    const iso=/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value)
+      ? value.replace(' ','T')+'Z' : value;
+    const ms=Date.parse(iso);
+    return Number.isFinite(ms)?ms:null;
+  }
+  function ticketAvailabilityProblem(ticket,now=Date.now()) {
+    if (ticket?.is_deleted===true || ticket?.sold_out===true || ticket?.hidden_ticket===true)
+      return 'KonfHub has disabled, hidden or sold out this ticket.';
+    const start=ticketTimeUtc(ticket,'start_timestamp');
+    const end=ticketTimeUtc(ticket,'end_timestamp');
+    if (start!==null && now<start) return 'The selected KonfHub ticket is not yet open.';
+    if (end!==null && now>=end) return 'The selected KonfHub ticket has already closed.';
+    return null;
+  }
+  // KonfHub's minute-granularity editor may store an 11:59 p.m. closing
+  // timestamp or the following 00:00 boundary. Either is acceptable for the
+  // displayed 30 November end-of-day deadline. A 6:00 p.m. close is NOT.
+  function ticketScheduleProblem(ticket,key) {
+    const start=ticketTimeUtc(ticket,'start_timestamp');
+    const end=ticketTimeUtc(ticket,'end_timestamp');
+    if (key.endsWith(':early') && end!==null &&
+        end!==EARLY_CUTOFF && end!==EARLY_CUTOFF-60000)
+      return 'Early ticket closes at ' + formatIst(end) + '; expected 30 Nov 2026, 11:59 p.m. IST.';
+    if (key.endsWith(':regular') && start!==null && start!==EARLY_CUTOFF)
+      return 'Regular ticket opens at ' + formatIst(start) + '; expected 1 Dec 2026, 12:00 a.m. IST.';
+    return null;
+  }
+  function formatIst(ms) {
+    if(ms===null || !Number.isFinite(ms)) return 'not reported';
+    return new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',
+      day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(ms)) + ' IST';
+  }
+  function ticketTimeSummary(ticket) {
+    return {opens:formatIst(ticketTimeUtc(ticket,'start_timestamp')),
+      closes:formatIst(ticketTimeUtc(ticket,'end_timestamp'))};
+  }
   function buildPrefillUrl(order, ticket) {
     if (!order?.person) throw new Error('Registrant details are missing.');
     if (!ticket || getTicketId(ticket) == null) throw new Error('KonfHub ticket ID is unavailable.');
@@ -142,6 +189,8 @@
         throw new Error('Regular registration starts on 1 December 2026. Please use the early ticket.');
       }
     }
+    const availabilityError=ticketAvailabilityProblem(ticket);
+    if (availabilityError) throw new Error(availabilityError);
     const price = getPrice(ticket);
     if (price !== null && price !== expected) {
       throw new Error('KonfHub ticket face value (' + price + ') differs from the selected fee (' + expected + '). Check the ticket configuration.');
@@ -149,10 +198,12 @@
     const url = new URL('https://konfhub.com/checkout/' + EVENT_SLUG);
     url.searchParams.set('ticketId',String(getTicketId(ticket)));
     const p = order.person;
-    // KonfHub documented default checkout keys.
+    // KonfHub documented default checkout keys. The public form metadata also
+    // exposes a Phone Number form with er_column_mapping="phone_number"; send
+    // both common phone keys, then confirm which KonfHub actually accepts.
     const defaultFields = {
       name:p.name, email_id:p.email, organisation:p.institution,
-      whatsapp_number:p.phone
+      whatsapp_number:p.phone, phone_number:p.phone
     };
     for (const [k,v] of Object.entries(defaultFields)) if (v) url.searchParams.set(k,String(v));
     const custom = {
@@ -177,25 +228,33 @@
   }
   async function getTickets(fetchImpl) {
     const fetcher = fetchImpl || (typeof fetch === 'function' ? fetch : null);
-    if (!fetcher) return {tickets:[],source:'unavailable',errors:['Fetch is unavailable.']};
-    const errors = [], sources = [], byId = new Map();
-    // Prefer live public metadata. Merge any missing IDs from the organizer-maintained
-    // local snapshot so a partial snapshot cannot hide tickets returned by KonfHub.
-    for (const [source,url] of [['KonfHub',PUBLIC_API],['local',PUBLIC_SNAPSHOT]]) {
+    if (!fetcher) return {tickets:[],source:'unavailable',errors:['Fetch is unavailable.'],
+      liveCount:0,snapshotCount:0,sourceByTicketId:{},liveAvailable:false};
+    const errors = [], sources = [], byId = new Map(), sourceByTicketId = {};
+    let liveCount=0, snapshotCount=0;
+    // The organizer's snapshot is a FALLBACK, never proof of current price or
+    // availability. Live public data wins for every matching ticket ID.
+    for (const [source,url] of [['KonfHub',PUBLIC_API],['local snapshot',PUBLIC_SNAPSHOT]]) {
       try {
         const response = await fetcher(url,{cache:'no-store'});
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const data = await response.json();
         const tickets = extractTickets(data);
         if (!tickets.length) { errors.push(source + ': no ticket records found.'); continue; }
+        if(source==='KonfHub')liveCount=tickets.length;
+        else snapshotCount=tickets.length;
         sources.push(source);
         for (const ticket of tickets) {
           const id = getTicketId(ticket);
-          if (id != null && !byId.has(String(id))) byId.set(String(id),ticket);
+          if (id != null && !byId.has(String(id))) {
+            byId.set(String(id),ticket);
+            sourceByTicketId[String(id)] = source;
+          }
         }
       } catch(e) { errors.push(source + ': ' + (e?.message || String(e))); }
     }
-    return {tickets:Array.from(byId.values()),source:sources.join(' + ') || 'unavailable',errors};
+    return {tickets:Array.from(byId.values()),source:sources.join(' + ') || 'unavailable',
+      errors,liveCount,snapshotCount,sourceByTicketId,liveAvailable:liveCount>0};
   }
   function assess(order,tickets) {
     const key = ticketKey(order);
@@ -209,5 +268,7 @@
   }
   return {EVENT_SLUG,PUBLIC_API,PUBLIC_SNAPSHOT,FALLBACK_WIDGET_ID,EARLY_CUTOFF,
     TICKETS,CUSTOM_ALIASES,normalize,ticketKey,expectedAmount,extractTickets,
-    matchTicket,getTicketId,getTicketName,getTicketForms,getFormName,getPrice,buildPrefillUrl,getTickets,assess};
+    matchTicket,getTicketId,getTicketName,getTicketForms,getFormName,getPrice,
+    ticketTimeUtc,formatIst,ticketTimeSummary,ticketAvailabilityProblem,ticketScheduleProblem,
+    buildPrefillUrl,getTickets,assess};
 });

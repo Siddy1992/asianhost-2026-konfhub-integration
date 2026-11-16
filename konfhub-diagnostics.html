@@ -1,55 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KonfHub Ticket Mapping Diagnostics | AsianHOST 2026</title>
-<link rel="icon" href="assets/asianhost-logo.png" type="image/png">
-<style>
-:root{font-family:system-ui,Arial,sans-serif;color:#152642;background:#f2f5fa}*{box-sizing:border-box}body{margin:0}header{background:#0d1f41;color:#fff;padding:22px}header div{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:15px;align-items:center}a{color:#0b3475}header a{color:#fff}main{max-width:1100px;margin:30px auto;padding:0 18px}h1{margin:0 0 10px}p{line-height:1.55}table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden}th,td{padding:12px;text-align:left;border-bottom:1px solid #e0e7f2;font-size:14px}th{background:#e7edf7}.yes{color:#136b3b;font-weight:700}.no{color:#a02d2d;font-weight:700}.notice{background:#fff8e8;border:1px solid #e4c77b;padding:14px 18px;border-radius:10px;margin:18px 0}code{background:#e8eff8;padding:2px 5px;border-radius:4px}button{padding:10px 15px;border-radius:8px;background:#0b3475;color:#fff;border:0;cursor:pointer}.notice-text{color:#98620a;font-weight:700}#errors{white-space:pre-wrap;color:#8a2b2b;font-size:13px;overflow-wrap:anywhere}@media(max-width:600px){th,td{font-size:12px;padding:7px}table{display:block;overflow-x:auto}}
-</style>
-<script defer src="registration-config.js"></script>
-<script defer src="konfhub-integration.js"></script>
-<script defer>
-window.addEventListener('DOMContentLoaded',async()=>{
- const K=window.AsianHOSTKonfHub;
- const $=id=>document.getElementById(id);
- const response=await K.getTickets();
- $('source').textContent=response.source;
- $('count').textContent=String(response.tickets.length);
- $('errors').textContent=response.errors.join('\n');
- let mapped=0, prefill=0;
- for(const [key,def] of Object.entries(K.TICKETS)){
-   const t=K.matchTicket(response.tickets,key);
-   const id=t&&K.getTicketId(t);
-   const price=t&&K.getPrice(t);
-   const forms=t?K.getTicketForms(t):[];
-   const hasRef=forms.some(f=>K.normalize(K.getFormName(f))==='asianhostregistrationid');
-   const valid=!!t && id!=null && (price==null || price===def.amount);
-   if(valid)mapped++;
-   if(valid&&hasRef)prefill++;
-   const status=!t?'Missing ticket':id==null?'Missing ticket ID':price!=null&&price!==def.amount?'Price mismatch':!hasRef?'Mapped; missing registration-ID field':'Ready';
-   const tr=document.createElement('tr');
-   for(const value of [key,def.names[0],String(def.amount),id!=null?String(id):'—',price==null?'Not reported':String(price),String(forms.length),hasRef?'Yes':'No',status]){
-     const td=document.createElement('td');td.textContent=value;tr.appendChild(td);
-   }
-   tr.lastElementChild.className=status==='Ready'?'yes':status.startsWith('Mapped')?'notice-text':'no';
-   $('tickets').appendChild(tr);
- }
- $('mapped').textContent=mapped+'/13';
- $('prefill-ready').textContent=prefill+'/13';
-});
-</script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1f41">
+  <title>KonfHub ticket readiness | AsianHOST 2026</title>
+  <link rel="icon" href="assets/asianhost-logo.png" type="image/png">
+  <link rel="stylesheet" href="konfhub-diagnostics.css">
+  <script defer src="registration-config.js"></script>
+  <script defer src="konfhub-integration.js"></script>
+  <script defer src="konfhub-diagnostics.js"></script>
 </head>
 <body>
-<header><div><strong>AsianHOST 2026 · KonfHub Mapping Diagnostics</strong><a href="index.html">← Registration home</a></div></header>
-<main>
-<h1>Ticket and form mapping check</h1>
-<p>This developer-only diagnostic uses public KonfHub ticket metadata. A ticket can be mapped without supporting registration-ID prefilling; the two checks are reported separately. No private API keys or payment information are requested.</p>
-<div class="notice"><strong>Source:</strong> <span id="source">Loading…</span> · <strong>Tickets found:</strong> <span id="count">—</span> · <strong>Mapped variants:</strong> <span id="mapped">—</span> · <strong>Registration-ID prefill:</strong> <span id="prefill-ready">—</span></div>
-<table><thead><tr><th>Website key</th><th>Expected KonfHub ticket</th><th>Fee (₹)</th><th>Ticket ID</th><th>Face value (₹)</th><th>Fields</th><th>Reference field</th><th>Status</th></tr></thead><tbody id="tickets"></tbody></table>
-<h2>Loading diagnostics</h2><p id="errors">Loading…</p>
-<p>When tickets are missing, open <a href="https://api.konfhub.com/event/url/asian-host-ticketing/tickets" target="_blank" rel="noopener">KonfHub's public tickets API</a>, save its JSON response as <code>konfhub-public-tickets.json</code> in the repository root, and reload this page. Do not upload private credentials or attendee data.</p>
-<p><a href="START_HERE_KONFHUB.md">Read the full integration and GitHub Pages setup guide</a></p>
-</main>
+  <header class="diagnostics-header"><div class="shell"><a class="brand" href="index.html"><img src="assets/asianhost-logo.png" alt="AsianHOST logo"><span><strong>AsianHOST 2026</strong><small>KonfHub integration diagnostics</small></span></a><a href="index.html" class="return-link">← Registration home</a></div></header>
+  <main class="shell">
+    <div class="eyebrow">DEVELOPER / ORGANIZER CHECKLIST</div>
+    <h1>Ticket mapping and launch readiness</h1>
+    <p class="lead">The website expects 13 KonfHub ticket variants. This page checks ticket IDs, published prices, registration-ID fields, ticket schedules and the provenance of public metadata. It does not verify payments, tax compliance or settlement.</p>
+    <div class="summary-grid">
+      <div class="stat"><span>Ticket variants mapped</span><strong id="mapped">—</strong><small>Names, IDs and published fees</small></div>
+      <div class="stat"><span>Registration ID field</span><strong id="prefill-ready">—</strong><small>Field present in metadata</small></div>
+      <div class="stat"><span>Schedule aligned</span><strong id="schedule-ready">—</strong><small>Early / regular boundary</small></div>
+      <div class="stat"><span>Live API records</span><strong id="live-count">—</strong><small>Not the cached snapshot</small></div>
+    </div>
+    <section class="panel notice"><h2>What the screenshots still require</h2><p>The 16 November organizer screenshots show <strong>five Early tickets closing at 6:00 p.m. IST on 30 November</strong> and <strong>five Regular tickets already open since 15 November</strong>. The website expects Early tickets through <strong>30 November, 11:59 p.m. IST</strong> and Regular tickets from <strong>1 December, 12:00 a.m. IST</strong>. Update the exact time in KonfHub for every applicable ticket, then refresh the public API snapshot.</p><p>KonfHub also displays <strong>18% GST</strong> on the ticket editor. Confirm with SRIC whether the published fee is inclusive or exclusive of tax and verify the actual checkout total.</p></section>
+    <section class="panel"><div class="section-heading"><div><h2>Live mapping audit</h2><p>Live KonfHub data takes precedence. A cached fallback is marked as such and cannot establish current availability.</p></div><div class="actions"><button id="reload" type="button">Refresh checks</button><button id="copy-actions" type="button" class="outline">Copy correction list</button><button id="download-csv" type="button" class="outline">Export audit CSV</button></div></div>
+      <p class="source-line"><strong>Source:</strong> <span id="source">Loading…</span> · <strong>Tickets found:</strong> <span id="count">—</span> · <strong>Snapshot records:</strong> <span id="snapshot-count">—</span></p>
+      <div class="table-scroll"><table><thead><tr><th>Category</th><th>Expected fee</th><th>Ticket ID</th><th>API fee</th><th>Source</th><th>Availability (IST)</th><th>Registration ID</th><th>Result</th></tr></thead><tbody id="tickets"></tbody></table></div>
+      <p id="errors" class="errors" role="status"></p>
+    </section>
+    <section class="panel"><h2>KonfHub changes before collecting payments</h2><ol id="action-list"><li>Checking ticket metadata…</li></ol><p class="muted">After editing tickets, open the <a href="https://api.konfhub.com/event/url/asian-host-ticketing/tickets" target="_blank" rel="noopener noreferrer">public KonfHub ticket API</a> without added query parameters, save the JSON response as <code>konfhub-public-tickets.json</code> in the repository root, commit and redeploy. Never publish attendee data or API keys.</p></section>
+    <section class="panel"><h2>What this static website cannot verify</h2><p>Payment completion, complimentary coupon eligibility, institutional settlement, final tax invoice and authoritative registration status require KonfHub's backend and an approved organizer backend. The GitHub Pages demo only prepares ticket-specific checkout links and prefill parameters.</p><p><a href="SETUP_AND_LAUNCH_16NOV.md">Complete configuration and deployment instructions</a> · <a href="https://konfhub.com/asian-host-ticketing" target="_blank" rel="noopener noreferrer">KonfHub event page</a></p></section>
+  </main>
+  <footer>AsianHOST 2026 · Organizer/developer diagnostics · No payment processing on this page</footer>
 </body>
 </html>

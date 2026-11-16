@@ -1,4 +1,1772 @@
 {
-  "tickets": [],
-  "note": "Optional fallback: paste the PUBLIC response from https://api.konfhub.com/event/url/asian-host-ticketing/tickets here. Never paste API keys, attendee data, bank details, or private tokens."
+  "_source_note": "Organizer-provided KonfHub public tickets API response (16 Nov 2026), with ticket 127189 price updated from 20 to 60000 based on a later organizer dashboard screenshot. NOT live verification. Live KonfHub API takes priority; mismatches block checkout.",
+  "_warning": "Do not use as evidence of payment, tax settlement, or final availability. Refresh after correcting all ticket times in KonfHub.",
+  "categorized": [],
+  "uncategorized": [
+    {
+      "ticket_id": 127187,
+      "ticket_name": "IEEE Member - Early",
+      "ticket_price": 50000,
+      "start_timestamp": "2026-11-14 20:18:51",
+      "end_timestamp": "2026-11-30 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186668,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper Title</p>",
+          "form_type": 1,
+          "form_order": 9,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "emergency_contact_name"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186667,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper ID</p>",
+          "form_type": 1,
+          "form_order": 8,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "institution"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186669,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">IEEE Membership Number</p>",
+          "form_type": 1,
+          "form_order": 10,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127188,
+      "ticket_name": "IEEE Member - Regular",
+      "ticket_price": 60000,
+      "start_timestamp": "2026-11-14 20:20:57",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186668,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper Title</p>",
+          "form_type": 1,
+          "form_order": 9,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "emergency_contact_name"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186667,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper ID</p>",
+          "form_type": 1,
+          "form_order": 8,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "institution"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186669,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">IEEE Membership Number</p>",
+          "form_type": 1,
+          "form_order": 10,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127189,
+      "ticket_name": "Non-IEEE Member - Early",
+      "ticket_price": 60000,
+      "start_timestamp": "2026-11-14 20:27:03",
+      "end_timestamp": "2026-11-30 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186667,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper ID</p>",
+          "form_type": 1,
+          "form_order": 8,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "institution"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186668,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper Title</p>",
+          "form_type": 1,
+          "form_order": 9,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "emergency_contact_name"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127190,
+      "ticket_name": "Non-IEEE Member - Regular",
+      "ticket_price": 70000,
+      "start_timestamp": "2026-11-14 20:27:37",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186667,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper ID</p>",
+          "form_type": 1,
+          "form_order": 8,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "institution"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186668,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Paper Title</p>",
+          "form_type": 1,
+          "form_order": 9,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "emergency_contact_name"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127191,
+      "ticket_name": "IEEE Student - Early",
+      "ticket_price": 15000,
+      "start_timestamp": "2026-11-14 20:28:12",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186669,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">IEEE Membership Number</p>",
+          "form_type": 1,
+          "form_order": 10,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127192,
+      "ticket_name": "IEEE Student - Regular",
+      "ticket_price": 25000,
+      "start_timestamp": "2026-11-14 20:29:07",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186669,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">IEEE Membership Number</p>",
+          "form_type": 1,
+          "form_order": 10,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127207,
+      "ticket_name": "Non-IEEE Student - Early",
+      "ticket_price": 25000,
+      "start_timestamp": "2026-11-14 20:30:22",
+      "end_timestamp": "2026-11-30 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127208,
+      "ticket_name": "Non-IEEE Student - Regular",
+      "ticket_price": 35000,
+      "start_timestamp": "2026-11-14 20:35:09",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127209,
+      "ticket_name": "IEEE Life Member - Early",
+      "ticket_price": 25000,
+      "start_timestamp": "2026-11-14 20:35:00",
+      "end_timestamp": "2026-11-30 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186669,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">IEEE Membership Number</p>",
+          "form_type": 1,
+          "form_order": 10,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127210,
+      "ticket_name": "IEEE Life Member - Regular",
+      "ticket_price": 35000,
+      "start_timestamp": "2026-11-14 20:38:23",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186669,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">IEEE Membership Number</p>",
+          "form_type": 1,
+          "form_order": 10,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127211,
+      "ticket_name": "Indian Student - General",
+      "ticket_price": 2000,
+      "start_timestamp": "2026-11-14 20:40:32",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127212,
+      "ticket_name": "PhD Forum - International",
+      "ticket_price": 15000,
+      "start_timestamp": "2026-11-14 20:41:20",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        }
+      ]
+    },
+    {
+      "ticket_id": 127213,
+      "ticket_name": "PhD Forum - Indian",
+      "ticket_price": 5000,
+      "start_timestamp": "2026-11-14 20:41:41",
+      "end_timestamp": "2026-12-13 12:30:00",
+      "currency_name": "INR",
+      "tax_percentage": 18,
+      "hidden_ticket": false,
+      "sold_out": false,
+      "is_deleted": false,
+      "max_tickets": 10,
+      "min_tickets": 1,
+      "forms": [
+        {
+          "form_id": 186473,
+          "form_name": "Name",
+          "form_type": 14,
+          "form_order": 1,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "name"
+        },
+        {
+          "form_id": 186633,
+          "form_name": "Country",
+          "form_type": 15,
+          "form_order": 4,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "country"
+        },
+        {
+          "form_id": 186666,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Registration Purpose</p>",
+          "form_type": 7,
+          "form_order": 7,
+          "is_mandatory": true,
+          "form_options": [
+            "Paper Author",
+            "General Participant",
+            "PhD Forum Participant"
+          ],
+          "is_default": false,
+          "er_column_mapping": "t_shirt_size"
+        },
+        {
+          "form_id": 186632,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Institution / Organisation</p>",
+          "form_type": 1,
+          "form_order": 3,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "organisation"
+        },
+        {
+          "form_id": 186474,
+          "form_name": "Email Address",
+          "form_type": 3,
+          "form_order": 2,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": true,
+          "er_column_mapping": "email_id"
+        },
+        {
+          "form_id": 186672,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Declaration / Consent</p>\n<p style=\"font-family: Hind, sans-serif;\">&nbsp;</p>\n<p style=\"font-family: Hind, sans-serif;\">I hereby confirm that the information provided during registration is accurate and complete. I have read and agree to the AsianHOST 2026 Terms &amp; Conditions and Refund &amp; Cancellation Policy, and I acknowledge the Privacy Policy. I understand that my registration information will be processed by the AsianHOST 2026 Organizing Committee and its authorized service providers, including KonfHub, for registration, ticketing, and payment administration. I also understand that my registration will be confirmed only upon successful payment verification or approval of a complimentary registration by the Organizing Committee.</p>",
+          "form_type": 10,
+          "form_order": 13,
+          "is_mandatory": true,
+          "form_options": [
+            "I agree to the above declaration and consent to the stated terms."
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186671,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">Dietary Restrictions</p>",
+          "form_type": 7,
+          "form_order": 12,
+          "is_mandatory": true,
+          "form_options": [
+            "Veg",
+            "Non Veg"
+          ],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186634,
+          "form_name": "Phone Number",
+          "form_type": 5,
+          "form_order": 5,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "phone_number"
+        },
+        {
+          "form_id": 186670,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">GSTIN</p>",
+          "form_type": 1,
+          "form_order": 11,
+          "is_mandatory": false,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "custom_forms"
+        },
+        {
+          "form_id": 186665,
+          "form_name": "<p style=\"font-family: Hind, sans-serif;\">AsianHOST Registration ID</p>",
+          "form_type": 1,
+          "form_order": 6,
+          "is_mandatory": true,
+          "form_options": [],
+          "is_default": false,
+          "er_column_mapping": "designation"
+        }
+      ]
+    }
+  ]
 }
