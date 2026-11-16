@@ -65,9 +65,21 @@
   function getTicketName(t) {
     return t && (t.ticket_name ?? t.ticketName ?? t.name ?? t.title ?? '');
   }
-  function getTicketForms(t) {
+  // The organizer removed Declaration / Consent (historical custom form 186672)
+  // from KonfHub on 16 Nov 2026. The bundled public API snapshot predates
+  // that change. Exclude this retired field EVEN IF the fallback snapshot
+  // or a cached vendor response still contains it.
+  const RETIRED_FORM_IDS = Object.freeze(['186672']);
+  function getRawTicketForms(t) {
     return Array.isArray(t?.forms) ? t.forms :
       Array.isArray(t?.registration_forms) ? t.registration_forms : [];
+  }
+  function isRetiredForm(f) {
+    const label=normalize(getFormName(f));
+    return RETIRED_FORM_IDS.includes(String(getFormId(f))) || label.startsWith('declarationconsent');
+  }
+  function getTicketForms(t) {
+    return getRawTicketForms(t).filter(f=>!isRetiredForm(f));
   }
   // The documented endpoint returns tickets with forms[]. Accept common envelope
   // shapes while avoiding unrelated objects that happen to contain an `id`.
@@ -113,10 +125,6 @@
     const names = aliases.map(normalize);
     const exact=forms.find(f => names.includes(normalize(getFormName(f))));
     if(exact)return exact;
-    // KonfHub's type-10 declaration has the heading AND its entire legal text
-    // embedded in form_name HTML. Match the unique heading, not the whole text.
-    if(names.includes('declarationconsent'))return forms.find(f =>
-      Number(f?.form_type)===10 && normalize(getFormName(f)).startsWith('declarationconsent'))||null;
     return null;
   }
   function valueAllowed(form, value) {
@@ -187,7 +195,7 @@
   // vendor-specific validation. Keep them independently testable.
   const PREFILL_FIELD_KEYS=Object.freeze([
     'institution','registrationId','purpose','paperId','paperTitle',
-    'phdReference','ieee','gstin','country','phone','dietary','consent','city','billing'
+    'phdReference','ieee','gstin','country','phone','dietary','city','billing'
   ]);
   function mappedField(forms,aliases) {
     const f=findForm(forms,aliases);
@@ -214,16 +222,6 @@
     return (lengths[country]||[]).includes(digits.length)?digits:'';
   }
   function isMandatory(f){return f?.is_mandatory===true||f?.is_mandatory===1||f?.is_mandatory==='true';}
-  function consentValue(order,forms){
-    if(order?.consent?.accepted!==true)return '';
-    const match=findForm(forms,['Declaration / Consent']);
-    const options=match?.form_options;
-    // KonfHub supplies the exact label for its required type-10 custom consent.
-    // Never guess "true" or mark the declaration accepted without an explicit
-    // affirmative action by the registrant on the AsianHOST review page.
-    if(!Array.isArray(options)||options.length!==1||typeof options[0]!=='string')return '';
-    return options[0];
-  }
   function getPrefillFields(order,ticket) {
     const p=order?.person||{};
     const forms=getTicketForms(ticket);
@@ -245,7 +243,6 @@
       ['country','Country',p.country==='Other'?'':p.country,['Country','Country of Residence']],
       ['phone','Phone Number',normalizedPhone(p),['Phone Number']],
       ['dietary','Dietary Restrictions',p.dietary,['Dietary Restrictions','Meal Preference','Dietary Preference']],
-      ['consent','Declaration / Consent',consentValue(order,forms),['Declaration / Consent']],
       ['city','City',p.city,['City']],
       ['billing','Billing Name',p.billing,['Billing Name','Invoice Billing Name']]
     ];
@@ -254,15 +251,13 @@
       const value=String(raw??'').trim();
       let reason='';
       if(!matched)reason='Field not attached to this KonfHub ticket';
-      else if(!value)reason=id==='consent'?'Participant has not explicitly accepted the declaration':
-        id==='phone'&&p.phone?'Phone format not validated for this country; enter manually':
+      else if(!value)reason=id==='phone'&&p.phone?'Phone format not validated for this country; enter manually':
         'No value supplied by the AsianHOST form';
       else if(!valueAllowed(matched.form,value))reason='Value does not match KonfHub configured options';
       return {id,label,key:matched?.key||null,value,ready:!reason,reason,
         required:!!matched&&isMandatory(matched.form),
         formType:matched?.form?.form_type??null,
-        risk:id==='consent'?'Requires explicit consent; checkbox prefill must be verified on KonfHub':
-          id==='phone'||id==='country'?'Specialized field; verify on KonfHub':'Text or listed option'};
+        risk:id==='phone'||id==='country'?'Specialized field; verify on KonfHub':'Text or listed option'};
     });
   }
   function requiredPrefillGaps(order,ticket){
@@ -317,7 +312,7 @@
       // field has an er_column_mapping such as organisation or country.
       url.searchParams.set(field.key,field.value);
     }
-    // Consent is sent only after explicit user agreement; never include documents.
+    // Never send retired form 186672. Local website policy acknowledgement stays local.
     return url.toString();
   }
   async function getTickets(fetchImpl) {
@@ -361,7 +356,7 @@
     catch(e) { return {ready:false,key,ticket,reason:e.message}; }
   }
   return {EVENT_SLUG,PUBLIC_API,PUBLIC_SNAPSHOT,FALLBACK_WIDGET_ID,EARLY_CUTOFF,
-    TICKETS,CUSTOM_ALIASES,PREFILL_FIELD_KEYS,getPrefillFields,requiredPrefillGaps,normalize,ticketKey,expectedAmount,extractTickets,
+    TICKETS,CUSTOM_ALIASES,PREFILL_FIELD_KEYS,RETIRED_FORM_IDS,getRawTicketForms,isRetiredForm,getPrefillFields,requiredPrefillGaps,normalize,ticketKey,expectedAmount,extractTickets,
     matchTicket,getTicketId,getTicketName,getTicketForms,getFormName,getPrice,
     ticketTimeUtc,formatIst,ticketTimeSummary,ticketAvailabilityProblem,ticketScheduleProblem,
     buildPrefillUrl,getTickets,assess};

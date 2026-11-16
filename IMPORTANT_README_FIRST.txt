@@ -1,15 +1,12 @@
-ASIANHOST 2026 — COMPLETE WEBSITE PACKAGE
+ASIANHOST 2026 — NO-DECLARATION KONFHUB PACKAGE
 
-This ZIP contains the complete standalone site (HTML, CSS, JavaScript, assets, four policy pages and README).
+The organizer removed KonfHub Declaration / Consent form 186672.
+The website's own policy acknowledgement remains local and is not sent to KonfHub.
 
-UPDATED REFUND POLICY:
-- Send refund requests directly to Prof. Sarani Bhattacharya: bhattacharya.sarani.iitkgp@gmail.com
-- Last date for requests: 5 December 2026, 11:59 p.m. IST
-- Requests received from 6 December onward are not considered.
+READ FIRST: START_HERE_KONFHUB.md and KONFHUB_NO_DECLARATION_SETUP.md.
 
-GITHUB UPDATE SAFETY:
-This complete ZIP is built from the most recent complete website package available in this conversation, with the revised policy pages integrated. If you have made newer changes to the live GitHub repository since that package (for example coupon logic or invoice features), do NOT replace the entire repository with this ZIP. Instead, use the accompanying POLICY_ONLY_PATCH ZIP: copy the four policy HTML pages and policy.css, then run apply_policy_links.py against your current GitHub files. This retains newer functionality.
+Recommended checkout: Basic name/email prefill.
+Experimental: Full custom-field prefill, only after testing in the field-isolation lab.
+Fallback: Ticket-only checkout, with manual attendee details.
 
-Before public launch, connect a secure payment gateway, server-side order verification, email delivery, a persistent database, and enforce the early-registration deadline on the server. The site is a frontend reference/demo, not a live payment processor.
-
-NOVEMBER 30 UPDATE: Read README_NOV30_KONFHUB_SETUP.md. The KonfHub screenshot shows an early ticket ending at 6 p.m. on Nov 30; update KonfHub to 11:59 p.m. IST to match the website before accepting payments.
+The full-prefill profile error may still originate from KonfHub's backend. The code cannot guarantee vendor acceptance. No payment status is verified on this static website.

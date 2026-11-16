@@ -1,4 +1,25 @@
-> **Current KonfHub integration:** See `README_NOV30_KONFHUB_SETUP.md`. The original demo payment/coupon examples described later are historical; the new checkout does not simulate paid status or honor public sample coupon codes.
+# AsianHOST 2026 — KonfHub integration (no declaration field)
+
+**Current release: 16 November 2026 — KonfHub Declaration / Consent removed.** The AsianHOST site still requires its own policy acknowledgement at review, but **never transmits retired KonfHub form `186672`**. The local historical KonfHub ticket snapshot still contains that form and is filtered at runtime. Dietary preference `186671` remains mapped when supported. Basic prefill is the recommended live route while full profile-update compatibility is investigated. All full-prefill URL tests are offline only and do not prove KonfHub server acceptance.
+
+**Start here:** [START_HERE_KONFHUB.md](START_HERE_KONFHUB.md) · [KONFHUB_NO_DECLARATION_SETUP.md](KONFHUB_NO_DECLARATION_SETUP.md) · [RELEASE_VERIFICATION.md](RELEASE_VERIFICATION.md).
+
+---
+
+
+> **Full-prefill field diagnostics (16 Nov 2026):** See `FULL_PREFILL_TEST_AND_DEPLOY.md` and `prefill-lab.html`. Basic prefill works; the extra KonfHub form fields still require live vendor-side validation.
+
+# AsianHOST 2026 — Complete Editable KonfHub Website (16 November 2026; profile-error diagnostic patch)
+
+**Checkout profile-error fix:** [`KONFHUB_PROFILE_UPDATE_ERROR_FIX.md`](KONFHUB_PROFILE_UPDATE_ERROR_FIX.md) explains the three checkout modes and how to isolate the KonfHub toast without paying.
+
+**Start here:** [`SETUP_AND_LAUNCH_16NOV.md`](SETUP_AND_LAUNCH_16NOV.md) contains the exact 13 KonfHub ticket IDs, screenshots-based corrections, complete edit/run/GitHub Pages deployment steps, and live-payment prerequisites. **Ticket audit:** [`konfhub-diagnostics.html`](konfhub-diagnostics.html) (run the website via HTTP to use it). **Printable checklist:** `KONFHUB_13_TICKET_CHECKLIST.csv`.
+
+**Current release:** The Early registration website cutoff is **30 November 2026, 11:59 p.m. IST**, with Regular rates beginning **1 December 2026**. All 13 ticket variants are mapped to organizer-supplied public ticket IDs. The original AsianHOST registration UI, author/paper rules, status examples, sample invoice and policy pages remain. The checkout has been redesigned to use KonfHub hosted ticket-specific links with attempted form prefill and explicit price/schedule/source checks.
+
+**Outstanding KonfHub admin corrections:** Latest screenshots show Early tickets closing **6:00 p.m. on 30 November** and Regular tickets already opening **15 November**. These need to be corrected in KonfHub before the live payment launch. The displayed **18% GST** and bank settlement must be confirmed with SRIC. A GitHub Pages site does **not** verify payments or issue official invoices. The supplied ticket snapshot is not a live verification.
+
+---
 
 # AsianHOST 2026 — Registration Website
 
@@ -59,8 +80,8 @@ To start fresh, clear storage for the website or use a private browsing window. 
 | `index.html` | Registration form, review, confirmation, status lookup | Main participant-facing page |
 | `app.js` | Fee table, deadline, paper rules, form validation, local records, confirmation and status | Replace browser-only operations with trusted APIs |
 | `styles.css` | Shared responsive styling | Preserve branding, mobile layout and accessible states |
-| `checkout.html` | Checkout, coupon input and simulated payment outcome | Replace payment buttons with hosted gateway checkout |
-| `checkout.js` | Sample 100% coupons, waived confirmation, mock paid/failed outcomes | Never trust client-side coupon or payment decisions |
+| `checkout.html` | Redesigned KonfHub ticket-specific checkout, registration summary and prefill warnings | No browser-side payment confirmation |
+| `checkout.js` | Public ticket mapping, checkout link display, local pending record migration | Does not redeem coupons or confirm payment |
 | `invoice.html` | **Illustrative invoice design, linked from confirmed status and confirmation** | Do not issue this as an official receipt or tax invoice |
 | `invoice.js` | Loads a successful sample/browser registration and populates the illustrative layout | Replace with approved server-generated invoice on request |
 | `invoice.css` | Printable invoice-preview design | Includes visible SAMPLE watermark |

@@ -45,11 +45,12 @@ async function initLab(){
     selection.clear();
     for(const f of fields){
       if(!f.ready||preset==='basic')continue;
-      if(preset==='text'&&!['phone','country','consent','dietary'].includes(f.id))selection.add(f.id);
+      if(preset==='text'&&!['phone','country','dietary'].includes(f.id))selection.add(f.id);
+      if(preset==='registrationId'&&f.id==='registrationId')selection.add(f.id);
+      if(preset==='institution'&&f.id==='institution')selection.add(f.id);
       if(preset==='country'&&f.id==='country')selection.add(f.id);
       if(preset==='phone'&&f.id==='phone')selection.add(f.id);
       if(preset==='dietary'&&f.id==='dietary')selection.add(f.id);
-      if(preset==='consent'&&f.id==='consent')selection.add(f.id);
       if(preset==='all')selection.add(f.id);
     }
     refresh();

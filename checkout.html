@@ -53,31 +53,30 @@
         </div>
         <div id="kh-warnings" class="kh-warnings" aria-live="polite" hidden></div>
         <form class="kh-final-details" id="kh-final-details" hidden>
-          <h3>Final details for complete prefill</h3>
-          <p>KonfHub requires a dietary selection and an explicit declaration. Existing registrations created before this update can complete those fields here. No checkbox is accepted automatically.</p>
+          <h3>Dietary preference for KonfHub</h3>
+          <p>Confirm your dietary preference, including for older pending registrations. The removed KonfHub Declaration / Consent field is <strong>never</strong> sent in the prefill URL. The website’s own terms acknowledgement remains on the review step.</p>
           <label for="kh-dietary">Dietary preference <span class="required">*</span></label>
           <select id="kh-dietary" required><option value="">Select preference</option><option value="Veg">Vegetarian (Veg)</option><option value="Non Veg">Non-vegetarian (Non Veg)</option></select>
-          <label class="kh-consent-line" for="kh-consent"><input type="checkbox" id="kh-consent" required><span><strong>Declaration / Consent</strong> — I confirm my information is accurate; I have read and agree to the <a href="terms.html" target="_blank" rel="noopener">Terms & Conditions</a> and <a href="refund.html" target="_blank" rel="noopener">Refund & Cancellation Policy</a>, acknowledge the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and consent to processing by AsianHOST 2026 and KonfHub for registration, ticketing and payment administration. I understand that registration is confirmed only after verified payment or an organizer-approved waiver. I authorize transferring my explicit agreement to the corresponding KonfHub form field and will verify it on checkout.</span></label>
-          <button type="submit" class="kh-button kh-button-secondary">Save required details for prefill</button>
+          <button type="submit" class="kh-button kh-button-secondary">Save dietary preference</button>
           <p id="kh-final-result" class="kh-details" aria-live="polite"></p>
         </form>
         <div class="kh-prefill-report" id="kh-prefill-report" hidden aria-live="polite"></div>
         <div class="kh-actions">
-          <a id="kh-prefill-full" class="kh-button" href="#" target="_blank" rel="noopener noreferrer" hidden>Continue with complete participant prefill ↗</a>
-          <a id="kh-prefill" class="kh-button kh-button-secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Basic prefill (fallback) ↗</a>
-          <a id="kh-text-prefill" class="kh-button kh-button-secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Prefill text fields (diagnostic) ↗</a>
+          <a id="kh-prefill" class="kh-button" href="#" target="_blank" rel="noopener noreferrer" hidden>Continue with basic prefill (recommended) ↗</a>
+          <a id="kh-prefill-full" class="kh-button kh-button-secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Try full participant prefill (experimental) ↗</a>
+          <a id="kh-text-prefill" class="kh-button kh-button-secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Test text-field prefill ↗</a>
           <a id="kh-prefill-lab" class="kh-button kh-button-outline" href="#" hidden>Test each additional field ↗</a>
           <a id="kh-ticket-only" class="kh-button kh-button-outline" href="#" target="_blank" rel="noopener noreferrer" hidden>Ticket-only checkout (no prefill) ↗</a>
           <a id="kh-event" class="kh-button kh-button-secondary" href="https://konfhub.com/asian-host-ticketing" target="_blank" rel="noopener noreferrer" hidden>Open KonfHub event page ↗</a>
         </div>
-        <p class="kh-details" id="kh-explanation">This page does not collect payment or update payment status. Your registration remains pending until confirmed independently.</p>
+        <p class="kh-details" id="kh-explanation">Basic name/email prefill is the recommended route while KonfHub’s full profile update is under investigation. This website cannot confirm payment or registration.</p>
         <p class="kh-details"><strong>Complimentary registration or coupon?</strong> Enter the approved discount code in KonfHub's <em>Apply Discount Code</em> field during hosted checkout. A waiver is not validated or applied by this GitHub Pages site.</p>
         <div class="kh-notice kh-profile-help" id="kh-profile-help" hidden>
           <strong>Seeing “Error updating user profile” in KonfHub?</strong>
-          <p>Confirm the <strong>Declaration / Consent</strong> and dietary preference first. If the red error remains, try <strong>Basic prefill</strong> or <strong>Ticket-only checkout</strong> in a private browser window and complete KonfHub fields manually. If the error persists, collect a redacted failed network response for KonfHub support. Do not submit payment during testing.</p>
+          <p>The retired Declaration / Consent field is excluded from all generated links. The red message can still come from KonfHub’s own profile-update endpoint or another field. Test <strong>Basic prefill</strong> first, then use <strong>Test each additional field</strong> to isolate the first failing field. For a reliable manual route use <strong>Ticket-only checkout</strong>. Collect the failing network request status and redacted response for KonfHub support; do not pay during diagnosis.</p>
           <p>These buttons do not verify payment, approve registration, or update your AsianHOST status.</p>
         </div>
-        <div class="kh-next-steps"><h3>Before submitting on KonfHub</h3><ol><li>Confirm the ticket category and the final amount including taxes.</li><li>Check name, email, institution, phone, registration ID, and applicable paper/IEEE fields.</li><li>Check that the consent you explicitly accepted is reflected on KonfHub; if it is not, select it manually before continuing.</li><li>Keep the official KonfHub booking/transaction confirmation for reconciliation.</li></ol></div>
+        <div class="kh-next-steps"><h3>Before submitting on KonfHub</h3><ol><li>Confirm the ticket category and the final amount including taxes.</li><li>Check name, email, institution, phone, registration ID, and applicable paper/IEEE fields.</li><li>Verify any additional mandatory KonfHub fields manually. The removed Declaration / Consent field is not transmitted by this website.</li><li>Keep the official KonfHub booking/transaction confirmation for reconciliation.</li></ol></div>
         <div id="kh-widget-wrap" class="kh-widget" hidden><iframe src="https://konfhub.com/widget/id/eaa9296e-ad76-4de9-bdc1-06a0c1ce1e1d" title="Indian Student – General KonfHub registration widget (manual entry)" width="100%" height="1000" allow="payment" loading="lazy"></iframe></div>
         <p class="kh-details" id="kh-widget-note" hidden>This manual iframe is configured only for Indian Student – General (₹2,000). It does not transfer the website's participant details. Enter the registration ID shown on the left manually.</p>
       </section>

@@ -111,12 +111,11 @@ async function init() {
     const fallback=$('kh-ticket-only');fallback.href=ticketOnly;fallback.hidden=false;fallback.target='_blank';
     $('kh-profile-help').hidden=false;
     const detailsForm=$('kh-final-details');detailsForm.hidden=false;
-    const diet=$('kh-dietary'),consent=$('kh-consent'),full=$('kh-prefill-full');
+    const diet=$('kh-dietary'),full=$('kh-prefill-full');
     diet.value=['Veg','Non Veg'].includes(order.person?.dietary)?order.person.dietary:'';
-    // Reflect an affirmative action already taken on the AsianHOST review page;
-    // old pending records are NOT silently consented.
-    consent.checked=order.consent?.accepted===true;
     const originalWarnings=Array.from($('kh-warnings').querySelectorAll('li')).map(x=>x.textContent);
+    if(result.sourceByTicketId?.[String(K.getTicketId(choice.ticket))]!=='KonfHub' && K.getRawTicketForms(choice.ticket).some(K.isRetiredForm))
+      originalWarnings.push('The bundled historical snapshot still lists retired KonfHub form 186672. It is excluded from every generated URL and mandatory-field check. Confirm the live KonfHub form was updated for all 13 tickets.');
     function refreshPrefill(){
       const fields=K.getPrefillFields(order,choice.ticket);
       const gaps=K.requiredPrefillGaps(order,choice.ticket);
@@ -136,45 +135,33 @@ async function init() {
       if(gaps.length===0){
         full.href=K.buildPrefillUrl(order,choice.ticket,{mode:'full'});
         full.hidden=false;
-        $('kh-final-result').textContent='All mapped mandatory fields have values. Review every field and the declaration on KonfHub before payment.';
+        $('kh-final-result').textContent='All mapped active mandatory fields have values. This is an experimental URL: KonfHub may still reject profile updates. Check all fields before payment.';
       }else{
         full.removeAttribute('href');full.hidden=true;
         $('kh-final-result').textContent='Complete the required fields above to enable complete prefill. Missing: '+gaps.map(x=>x.label).join(', ')+'.';
       }
-      const textFields=K.PREFILL_FIELD_KEYS.filter(x=>!['phone','country','dietary','consent'].includes(x));
+      const textFields=K.PREFILL_FIELD_KEYS.filter(x=>!['phone','country','dietary'].includes(x));
       const textPrefill=$('kh-text-prefill');
       textPrefill.href=K.buildPrefillUrl(order,choice.ticket,{mode:'full',fields:textFields});
       textPrefill.hidden=false;textPrefill.target='_blank';
       const extra=[];
       if(gaps.length)extra.push('Complete prefill is temporarily disabled because KonfHub requires: '+gaps.map(x=>x.label).join(', ')+'.');
-      const f=fields.find(x=>x.id==='consent');
-      if(f?.ready)extra.push('Explicit declaration accepted on AsianHOST. The exact KonfHub consent option is included as custom field '+f.key+'. KonfHub must still accept this field and the attendee must verify it there.');
       if(order.purpose!=='author'&&fields.some(x=>x.id==='paperId'&&x.required))extra.push('KonfHub currently requires Paper ID/Title on this full ticket even for general attendees. The prefill explicitly says Not applicable; organizers should make these fields conditional.');
       showWarnings([...originalWarnings,...extra]);
-      $('kh-explanation').textContent='Complete prefill includes the ticket-specific institution, reference, purpose, paper/IEEE fields, country, phone, dietary preference and explicit declaration when present. It does not verify payment. If KonfHub still reports a profile-update error, use Basic prefill and complete its form manually; the provider may need to correct validation.';
+      $('kh-explanation').textContent='Basic name/email prefill is recommended. Experimental full prefill attempts active ticket-specific institution, reference, purpose, paper/IEEE, country, phone and dietary fields. Retired Declaration / Consent is always excluded. KonfHub may still reject additional fields; use the field-isolation lab or manual checkout if the red profile error persists. No payment is verified here.';
     }
     function markDirty(){
       full.hidden=true;full.removeAttribute('href');
       $('kh-final-result').textContent='You changed the required details. Select “Save required details for prefill” to regenerate the checkout URL.';
     }
     diet.addEventListener('change',markDirty);
-    consent.addEventListener('change',markDirty);
     detailsForm.addEventListener('submit',e=>{
       e.preventDefault();
       if(!['Veg','Non Veg'].includes(diet.value)){
         $('kh-final-result').textContent='Please select Vegetarian or Non-vegetarian.';
         diet.focus();return;
       }
-      if(!consent.checked){
-        $('kh-final-result').textContent='Complete prefill requires your explicit agreement to the declaration; this cannot be assumed.';
-        consent.focus();return;
-      }
-      const previouslyAccepted=order.consent?.accepted===true;
       order.person.dietary=diet.value;
-      order.consent={accepted:true,
-        acceptedAt:previouslyAccepted&&order.consent.acceptedAt?order.consent.acceptedAt:new Date().toISOString(),
-        source:previouslyAccepted?'AsianHOST review / checkout':'AsianHOST checkout',
-        version:'KonfHub form 186672 / Nov 2026'};
       order.updated=new Date().toISOString();
       orders[id]=order;
       if(!saveOrders(orders)){

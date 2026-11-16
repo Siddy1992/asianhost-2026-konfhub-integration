@@ -19,8 +19,8 @@
     'Set all five Regular tickets to open on 1 December 2026 at 12:00 a.m. IST. The screenshots still show Regular tickets opening 15 November.',
     'Verify the three fixed-fee tickets stay available: Indian Student – General ₹2,000; PhD Forum – International ₹15,000; PhD Forum – Indian ₹5,000.',
     'Confirm with SRIC whether the 18% GST shown in KonfHub is inclusive or additional, the applicable SAC/HSN, gateway charges, settlement account and payment activation.',
-    'Check each KonfHub registration form: AsianHOST Registration ID, institution, phone, country, paper ID/title only for authors, IEEE number only for IEEE categories, dietary choice and unchecked mandatory consent.',
-    'Test all 13 tickets using non-payment previews, then test a KonfHub booking/payment only after institutional approval. Configure private webhook verification for authoritative status.'
+    'Confirm Declaration / Consent (historical form 186672) is removed from every live ticket. Check AsianHOST Registration ID, institution, phone, country, author-only paper fields, IEEE fields, and dietary choice.',
+    'Test all 13 tickets without payment, isolating each custom field when the KonfHub profile error appears. For unresolved errors send the redacted failing request and response to KonfHub support; configure private webhook verification for payment status.'
   ];}
   async function load(){
     $('tickets').replaceChildren();$('errors').textContent='';
