@@ -104,8 +104,19 @@ async function init() {
   $('kh-loading').hidden=true;
   if(choice.ticket)renderTicket(K,choice,result);
   if(choice.ready){
-    const link=$('kh-prefill');link.href=choice.url;link.hidden=false;link.target='_blank';
-    $('kh-explanation').textContent='The correct KonfHub ticket was matched and a prefill URL was prepared. This does not prove that KonfHub accepted each field or that a payment succeeded. Verify all entries and the total on KonfHub. The browser record remains pending.';
+    // Progressive checkout modes let organizers isolate profile errors without
+    // removing the automatic full-field mapping from the demonstration.
+    const basic=K.buildPrefillUrl(order,choice.ticket,{mode:'safe'});
+    const ticketOnly=K.buildPrefillUrl(order,choice.ticket,{mode:'ticket'});
+    const link=$('kh-prefill');link.href=basic;link.hidden=false;link.target='_blank';
+    const full=$('kh-prefill-full');full.href=choice.url;full.hidden=false;full.target='_blank';
+    const fallback=$('kh-ticket-only');fallback.href=ticketOnly;fallback.hidden=false;fallback.target='_blank';
+    $('kh-profile-help').hidden=false;
+    $('kh-explanation').textContent='Basic prefill sends name and email only. Full prefill attempts the mapped participant fields, but may be rejected by KonfHub; ticket-only sends no participant details. Always check and correct the form on KonfHub. No option updates your browser-local payment status.';
+    if(/@(example\.(org|com|net)|test\.invalid)$/i.test(String(order.person.email||''))) {
+      showWarnings([...(Array.from($('kh-warnings').querySelectorAll('li')).map(x=>x.textContent)),
+        'This is a fictional example email address. Do not use sample identities for live registration or payment.']);
+    }
   }else{
     const why=choice.reason||'Ticket information could not be loaded.';
     showMessage(why+' No automated checkout will be offered for a missing, closed or incorrectly priced ticket.','warning');

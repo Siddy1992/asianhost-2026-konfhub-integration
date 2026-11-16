@@ -174,7 +174,12 @@
     return {opens:formatIst(ticketTimeUtc(ticket,'start_timestamp')),
       closes:formatIst(ticketTimeUtc(ticket,'end_timestamp'))};
   }
-  function buildPrefillUrl(order, ticket) {
+  // Modes: ticket = ticket ID only; safe = name and email only;
+  // full = mapped fields, excluding ambiguous duplicate profile phone keys.
+  // The default stays full for backwards compatibility with developer tooling.
+  function buildPrefillUrl(order, ticket, options = {}) {
+    const mode = options.mode || 'full';
+    if (!['ticket','safe','full'].includes(mode)) throw new Error('Unknown checkout prefill mode.');
     if (!order?.person) throw new Error('Registrant details are missing.');
     if (!ticket || getTicketId(ticket) == null) throw new Error('KonfHub ticket ID is unavailable.');
     const key = ticketKey(order);
@@ -197,22 +202,33 @@
     }
     const url = new URL('https://konfhub.com/checkout/' + EVENT_SLUG);
     url.searchParams.set('ticketId',String(getTicketId(ticket)));
+    // First diagnostic: ticket-only checkout isolates KonfHub's profile update
+    // from all user-controlled URL parameters. Never send PII in this mode.
+    if (mode === 'ticket') return url.toString();
     const p = order.person;
-    // KonfHub documented default checkout keys. The public form metadata also
-    // exposes a Phone Number form with er_column_mapping="phone_number"; send
-    // both common phone keys, then confirm which KonfHub actually accepts.
-    const defaultFields = {
-      name:p.name, email_id:p.email, organisation:p.institution,
-      whatsapp_number:p.phone, phone_number:p.phone
-    };
-    for (const [k,v] of Object.entries(defaultFields)) if (v) url.searchParams.set(k,String(v));
+    // Safest automated prefill: use only KonfHub's basic documented fields.
+    // The full mode is optional because an organizer observed a KonfHub
+    // "Error updating user profile" toast after the legacy all-field prefill.
+    for (const [k,v] of Object.entries({name:p.name, email_id:p.email})) {
+      if (v) url.searchParams.set(k,String(v));
+    }
+    if (mode === 'safe') return url.toString();
+    if (p.institution) url.searchParams.set('organisation',String(p.institution));
+    const forms = getTicketForms(ticket);
+    // Do not send the same number as BOTH whatsapp_number and phone_number.
+    // For an organizer-created Phone Number form, use its exact form_id.
+    // KonfHub's acceptance of this custom-field prefill requires live testing.
+    const phone = String(p.phone || '').replace(/[\s().-]/g,'');
+    const phoneForm = findForm(forms,['Phone Number']);
+    if (/^\+?[0-9]{8,15}$/.test(phone) && phoneForm && getFormId(phoneForm) != null) {
+      url.searchParams.set(String(getFormId(phoneForm)),phone);
+    }
     const custom = {
       registrationId:order.id, purpose:purposeLabel(order),
       paperId:order.paperId, paperTitle:order.paperTitle,
       phdReference:order.phdReference, ieee:p.ieee,
       country:p.country, city:p.city, billing:p.billing, gstin:p.gstin
     };
-    const forms = getTicketForms(ticket);
     for (const [key,value] of Object.entries(custom)) {
       if (value == null || value === '') continue;
       const form = findForm(forms,CUSTOM_ALIASES[key] || []);

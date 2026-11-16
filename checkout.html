@@ -53,10 +53,17 @@
         </div>
         <div id="kh-warnings" class="kh-warnings" aria-live="polite" hidden></div>
         <div class="kh-actions">
-          <a id="kh-prefill" class="kh-button" href="#" rel="noopener noreferrer" hidden>Preview prefilled KonfHub checkout ↗</a>
+          <a id="kh-prefill" class="kh-button" href="#" target="_blank" rel="noopener noreferrer" hidden>Continue with basic prefill ↗</a>
+          <a id="kh-prefill-full" class="kh-button kh-button-secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Try full participant prefill ↗</a>
+          <a id="kh-ticket-only" class="kh-button kh-button-outline" href="#" target="_blank" rel="noopener noreferrer" hidden>Ticket-only checkout (no prefill) ↗</a>
           <a id="kh-event" class="kh-button kh-button-secondary" href="https://konfhub.com/asian-host-ticketing" target="_blank" rel="noopener noreferrer" hidden>Open KonfHub event page ↗</a>
         </div>
         <p class="kh-details" id="kh-explanation">This page does not collect payment or update payment status. Your registration remains pending until confirmed independently.</p>
+        <div class="kh-notice kh-profile-help" id="kh-profile-help" hidden>
+          <strong>Seeing “Error updating user profile” in KonfHub?</strong>
+          <p>First try <strong>Ticket-only checkout</strong> in a private browser window, enter valid attendee details manually, and stop before submitting a payment. If that works, try Basic prefill; use Full prefill only after the basic flow succeeds. A KonfHub error may require KonfHub support even if you remove prefill.</p>
+          <p>These buttons do not verify payment, approve registration, or update your AsianHOST status.</p>
+        </div>
         <div class="kh-next-steps"><h3>Before submitting on KonfHub</h3><ol><li>Confirm the ticket category and the final amount including taxes.</li><li>Check name, email, institution, phone, registration ID, and applicable paper/IEEE fields.</li><li>Read and accept KonfHub's declaration yourself; consent is never preselected.</li><li>Keep the official KonfHub booking/transaction confirmation for reconciliation.</li></ol></div>
         <div id="kh-widget-wrap" class="kh-widget" hidden><iframe src="https://konfhub.com/widget/id/eaa9296e-ad76-4de9-bdc1-06a0c1ce1e1d" title="Indian Student – General KonfHub registration widget (manual entry)" width="100%" height="1000" allow="payment" loading="lazy"></iframe></div>
         <p class="kh-details" id="kh-widget-note" hidden>This manual iframe is configured only for Indian Student – General (₹2,000). It does not transfer the website's participant details. Enter the registration ID shown on the left manually.</p>
