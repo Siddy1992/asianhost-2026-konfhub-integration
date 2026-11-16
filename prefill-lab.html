@@ -41,14 +41,16 @@
 <div class="lab-note"><strong>Diagnostic only — no payment.</strong> Use a real, valid attendee profile that you control. Open each test in a new KonfHub tab and stop at the payment-selection page. If results vary, clear the KonfHub session between tests. The URL contains participant information; do not share unredacted links or screenshots of the address bar.</div>
 <section class="lab-panel"><h2>Selected registration</h2><div class="lab-status" id="lab-status" role="status">Loading registration and public ticket metadata…</div><p class="lab-muted" id="lab-ticket"></p></section>
 <section class="lab-panel" id="lab-controls" hidden>
-<h2>Choose fields to transfer</h2><p><strong>Name and email are always included.</strong> Every other field uses the exact mapping key from the selected KonfHub ticket. Missing or invalid values are not sent.</p>
+<h2>Choose fields to transfer</h2><p><strong>Name and email are always included.</strong> Every other field uses the exact mapping key from the selected KonfHub ticket. Missing or invalid values are not sent. Consent is included only if the registrant explicitly accepted it on the AsianHOST review or checkout page.</p>
 <table class="lab-fields"><thead><tr><th>Include</th><th>AsianHOST field</th><th>KonfHub mapping</th><th>Availability</th></tr></thead><tbody id="lab-field-rows"></tbody></table>
 <div class="lab-actions">
 <button type="button" class="lab-btn" data-preset="basic">1 · Basic only</button>
 <button type="button" class="lab-btn" data-preset="text">2 · All text/option fields</button>
-<button type="button" class="lab-btn" data-preset="country">3 · Text + country</button>
-<button type="button" class="lab-btn" data-preset="phone">4 · Text + phone</button>
-<button type="button" class="lab-btn" data-preset="all">5 · All mapped fields</button>
+<button type="button" class="lab-btn" data-preset="country">3 · Country only</button>
+<button type="button" class="lab-btn" data-preset="phone">4 · Phone only</button>
+<button type="button" class="lab-btn" data-preset="dietary">5 · Dietary only</button>
+<button type="button" class="lab-btn" data-preset="consent">6 · Consent only (explicit acceptance)</button>
+<button type="button" class="lab-btn" data-preset="all">7 · All mapped fields</button>
 </div>
 <p class="lab-muted" id="lab-selection"></p>
 <button type="button" class="lab-btn primary" id="lab-open">Open KonfHub with selected fields ↗</button>
@@ -57,8 +59,8 @@
 <section class="lab-panel"><h2>Recommended test sequence</h2>
 <div class="lab-step"><strong>Test A:</strong> Basic only — already confirmed working. This is your control.</div>
 <div class="lab-step"><strong>Test B:</strong> All text/option fields — checks institution, registration ID, purpose and applicable paper/IEEE fields.</div>
-<div class="lab-step"><strong>Test C:</strong> Text + country — isolates the KonfHub country selector.</div>
-<div class="lab-step"><strong>Test D:</strong> Text + phone — isolates phone validation. Indian numbers are sent as 10 national digits, without a duplicate +91 prefix.</div>
+<div class="lab-step"><strong>Test C:</strong> Country only — isolates the KonfHub country selector.</div>
+<div class="lab-step"><strong>Test D:</strong> Phone only — isolates phone validation. Indian numbers are sent as 10 national digits, without a duplicate +91 prefix.</div>
 <div class="lab-step"><strong>Test E:</strong> All mapped fields — attempt only after B, C and D succeed individually.</div>
 <p class="lab-muted">If B fails, deselect all extra fields, then enable Institution, Registration ID, Registration Purpose and other fields one by one. Record the first failing field and its numeric mapping ID, but do not share participant data.</p></section>
 <section class="lab-panel"><h2>What cannot be automatically transferred yet?</h2><p>The original AsianHOST form does not collect dietary preference, so it cannot be prefilled. KonfHub's declaration/consent must be accepted by the participant, never preselected. The current ticket metadata does not show a separate PhD Forum reference field or City/Billing Name on every ticket; fields absent from a selected ticket are skipped.</p><p>Some KonfHub tickets mark paper fields or IEEE membership as mandatory even for registrations where they may not apply. Adjust those requirements in <strong>Event Info → Forms</strong> for the relevant tickets.</p></section>

@@ -111,7 +111,13 @@
   function isDefaultForm(f) { return f?.is_default === true || f?.is_default === 1 || f?.is_default === 'true'; }
   function findForm(forms, aliases) {
     const names = aliases.map(normalize);
-    return forms.find(f => names.includes(normalize(getFormName(f)))) || null;
+    const exact=forms.find(f => names.includes(normalize(getFormName(f))));
+    if(exact)return exact;
+    // KonfHub's type-10 declaration has the heading AND its entire legal text
+    // embedded in form_name HTML. Match the unique heading, not the whole text.
+    if(names.includes('declarationconsent'))return forms.find(f =>
+      Number(f?.form_type)===10 && normalize(getFormName(f)).startsWith('declarationconsent'))||null;
+    return null;
   }
   function valueAllowed(form, value) {
     const opts = form?.form_options ?? form?.formOptions;
@@ -181,7 +187,7 @@
   // vendor-specific validation. Keep them independently testable.
   const PREFILL_FIELD_KEYS=Object.freeze([
     'institution','registrationId','purpose','paperId','paperTitle',
-    'phdReference','ieee','gstin','country','phone','city','billing'
+    'phdReference','ieee','gstin','country','phone','dietary','consent','city','billing'
   ]);
   function mappedField(forms,aliases) {
     const f=findForm(forms,aliases);
@@ -190,35 +196,56 @@
     if(key===null || key===undefined || key==='' || key==='custom_forms')return null;
     return {key:String(key),form:f};
   }
+  const DIAL_CODES=Object.freeze({India:'91',China:'86','United States':'1',
+    Singapore:'65','United Kingdom':'44',Germany:'49',Japan:'81',Australia:'61',
+    'United Arab Emirates':'971'});
   function normalizedPhone(p) {
     const raw=String(p?.phone||'').trim();
-    if(!raw)return '';
-    const digits=raw.replace(/\D/g,'');
-    // A KonfHub Phone Number custom field presents its own country/dial code.
-    // For India, pass a 10-digit national number rather than +91 twice.
-    if(normalize(p?.country)==='india') {
-      const national=digits.length===12 && digits.startsWith('91')?digits.slice(2):digits;
-      return /^[6-9][0-9]{9}$/.test(national)?national:'';
-    }
-    // International phone-number formatting is not established by the public
-    // API. Do not guess dial-code parsing for a paid registration form.
-    return '';
+    const country=String(p?.country||'').trim();
+    const dial=DIAL_CODES[country];
+    if(!raw||!dial)return '';
+    let digits=raw.replace(/\D/g,'');
+    if(raw.startsWith('+') && digits.startsWith(dial))digits=digits.slice(dial.length);
+    else if(country==='India' && digits.length===12 && digits.startsWith('91'))digits=digits.slice(2);
+    if(country==='India')return /^[6-9][0-9]{9}$/.test(digits)?digits:'';
+    const lengths={China:[11],Singapore:[8],'United States':[10],
+      'United Kingdom':[10,11],Germany:[7,8,9,10,11,12],Japan:[9,10],
+      Australia:[9,10],'United Arab Emirates':[9]};
+    return (lengths[country]||[]).includes(digits.length)?digits:'';
+  }
+  function isMandatory(f){return f?.is_mandatory===true||f?.is_mandatory===1||f?.is_mandatory==='true';}
+  function consentValue(order,forms){
+    if(order?.consent?.accepted!==true)return '';
+    const match=findForm(forms,['Declaration / Consent']);
+    const options=match?.form_options;
+    // KonfHub supplies the exact label for its required type-10 custom consent.
+    // Never guess "true" or mark the declaration accepted without an explicit
+    // affirmative action by the registrant on the AsianHOST review page.
+    if(!Array.isArray(options)||options.length!==1||typeof options[0]!=='string')return '';
+    return options[0];
   }
   function getPrefillFields(order,ticket) {
     const p=order?.person||{};
     const forms=getTicketForms(ticket);
+    const isAuthor=order?.purpose==='author';
+    // KonfHub currently makes Paper ID and Paper Title mandatory on FULL tickets
+    // even for non-authors. "Not applicable" is explicit, not a fictitious paper.
+    const paperId=isAuthor?order?.paperId:'Not applicable';
+    const paperTitle=isAuthor?order?.paperTitle:'Not applicable - general participant';
     const definitions=[
       ['institution','Institution / Organisation',p.institution,
         ['Institution / Organisation','Institution / Organization','Institution','Organisation','Organization']],
       ['registrationId','AsianHOST Registration ID',order?.id,['AsianHOST Registration ID','AsianHOST Reference ID','Registration Reference ID']],
       ['purpose','Registration Purpose',purposeLabel(order||{}),['Registration Purpose']],
-      ['paperId','Paper ID',order?.purpose==='author'?order.paperId:'',['Paper ID','Accepted Paper ID']],
-      ['paperTitle','Paper Title',order?.purpose==='author'?order.paperTitle:'',['Paper Title','Accepted Paper Title']],
+      ['paperId','Paper ID',paperId,['Paper ID','Accepted Paper ID']],
+      ['paperTitle','Paper Title',paperTitle,['Paper Title','Accepted Paper Title']],
       ['phdReference','PhD Forum Reference',order?.purpose==='phd'?order.phdReference:'',['PhD Forum Reference','PhD Reference','PhD Forum Submission ID']],
       ['ieee','IEEE Membership Number',p.ieee,['IEEE Membership Number','IEEE Member Number','IEEE Membership ID']],
       ['gstin','GSTIN',p.gstin,['GSTIN','GST Number']],
-      ['country','Country',p.country,['Country','Country of Residence']],
+      ['country','Country',p.country==='Other'?'':p.country,['Country','Country of Residence']],
       ['phone','Phone Number',normalizedPhone(p),['Phone Number']],
+      ['dietary','Dietary Restrictions',p.dietary,['Dietary Restrictions','Meal Preference','Dietary Preference']],
+      ['consent','Declaration / Consent',consentValue(order,forms),['Declaration / Consent']],
       ['city','City',p.city,['City']],
       ['billing','Billing Name',p.billing,['Billing Name','Invoice Billing Name']]
     ];
@@ -227,14 +254,33 @@
       const value=String(raw??'').trim();
       let reason='';
       if(!matched)reason='Field not attached to this KonfHub ticket';
-      else if(!value)reason=id==='phone' && p.phone
-        ? 'Phone format not verified for this country; enter manually'
-        : 'No value supplied by the AsianHOST form';
-      else if(!valueAllowed(matched.form,value))reason='Value does not match KonfHub dropdown options';
+      else if(!value)reason=id==='consent'?'Participant has not explicitly accepted the declaration':
+        id==='phone'&&p.phone?'Phone format not validated for this country; enter manually':
+        'No value supplied by the AsianHOST form';
+      else if(!valueAllowed(matched.form,value))reason='Value does not match KonfHub configured options';
       return {id,label,key:matched?.key||null,value,ready:!reason,reason,
+        required:!!matched&&isMandatory(matched.form),
         formType:matched?.form?.form_type??null,
-        risk:id==='phone'||id==='country'?'Specialized field — test separately':'Text or listed option'};
+        risk:id==='consent'?'Requires explicit consent; checkbox prefill must be verified on KonfHub':
+          id==='phone'||id==='country'?'Specialized field; verify on KonfHub':'Text or listed option'};
     });
+  }
+  function requiredPrefillGaps(order,ticket){
+    const fields=getPrefillFields(order,ticket);
+    const gaps=fields.filter(f=>f.required&&!f.ready);
+    const mapped=new Set(fields.filter(f=>f.key).map(f=>String(f.key)));
+    for(const f of getTicketForms(ticket)){
+      if(!isMandatory(f))continue;
+      const key=isDefaultForm(f)?String(getFormMapping(f)):String(getFormId(f));
+      if(isDefaultForm(f)&&key==='name'){
+        if(!String(order?.person?.name||'').trim())gaps.push({id:'name',label:'Name',required:true});
+      }else if(isDefaultForm(f)&&key==='email_id'){
+        if(!String(order?.person?.email||'').trim())gaps.push({id:'email',label:'Email Address',required:true});
+      }else if(!mapped.has(key)){
+        gaps.push({id:'unmapped-'+key,label:getFormName(f).slice(0,75)||'Unknown mandatory KonfHub field',required:true});
+      }
+    }
+    return gaps;
   }
   // Modes: ticket = ticket ID only; safe = name and email only;
   // full = name/email + selected mapped fields. A fields array allows a
@@ -271,7 +317,7 @@
       // field has an er_column_mapping such as organisation or country.
       url.searchParams.set(field.key,field.value);
     }
-    // Consent is NEVER pre-accepted, and no document uploads are passed.
+    // Consent is sent only after explicit user agreement; never include documents.
     return url.toString();
   }
   async function getTickets(fetchImpl) {
@@ -315,7 +361,7 @@
     catch(e) { return {ready:false,key,ticket,reason:e.message}; }
   }
   return {EVENT_SLUG,PUBLIC_API,PUBLIC_SNAPSHOT,FALLBACK_WIDGET_ID,EARLY_CUTOFF,
-    TICKETS,CUSTOM_ALIASES,PREFILL_FIELD_KEYS,getPrefillFields,normalize,ticketKey,expectedAmount,extractTickets,
+    TICKETS,CUSTOM_ALIASES,PREFILL_FIELD_KEYS,getPrefillFields,requiredPrefillGaps,normalize,ticketKey,expectedAmount,extractTickets,
     matchTicket,getTicketId,getTicketName,getTicketForms,getFormName,getPrice,
     ticketTimeUtc,formatIst,ticketTimeSummary,ticketAvailabilityProblem,ticketScheduleProblem,
     buildPrefillUrl,getTickets,assess};

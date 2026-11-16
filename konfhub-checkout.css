@@ -80,3 +80,22 @@
 .kh-profile-help { background:#eef4ff; border-color:#b9ccec; font-size:12px; }
 .kh-profile-help p { margin:8px 0 0; }
 .kh-profile-help[hidden] { display:none !important; }
+
+/* Explicit KonfHub consent / dietary completion; no auto-checked consent. */
+.kh-final-details { margin:20px 0 16px;padding:20px;border:1px solid #bdd1ec;background:#f5f9ff;border-radius:12px;display:flex;flex-direction:column;gap:11px; }
+.kh-final-details[hidden],.kh-prefill-report[hidden]{display:none!important}
+.kh-final-details h3 { margin:0!important;color:#163b73; }
+.kh-final-details p { font-size:12px;color:#526781;line-height:1.6;margin:0; }
+.kh-final-details label { font-size:13px;font-weight:650;color:#16365e; }
+.kh-final-details select { background:#fff;border:1px solid #b8c9e0;border-radius:8px;padding:12px;font:inherit;width:100%; }
+.kh-final-details .kh-consent-line { display:flex;gap:12px;align-items:flex-start;line-height:1.6;font-size:12px;font-weight:400; }
+.kh-consent-line input { width:20px;height:20px;flex-shrink:0;accent-color:#103e7a;margin-top:2px; }
+.kh-consent-line a { color:#17498b;text-decoration:underline; }
+.kh-final-details button { align-self:flex-start; }
+.kh-prefill-report { margin:16px 0;background:#fff;border:1px solid #d8e4f4;border-radius:10px;padding:14px; }
+.kh-prefill-report h3 { font-size:14px!important;margin:0 0 10px!important; }
+.kh-prefill-report ul { margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:7px 12px; }
+.kh-prefill-report li { font-size:11px;color:#3b526f;line-height:1.45; }
+.kh-prefill-report li strong { color:#0c6c4e; }
+.kh-prefill-report li.kh-missing strong { color:#a15a16; }
+@media(max-width:540px){.kh-prefill-report ul{grid-template-columns:1fr}.kh-final-details{padding:14px}}

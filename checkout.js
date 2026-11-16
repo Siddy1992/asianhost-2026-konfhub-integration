@@ -104,20 +104,87 @@ async function init() {
   $('kh-loading').hidden=true;
   if(choice.ticket)renderTicket(K,choice,result);
   if(choice.ready){
-    // Progressive checkout modes let organizers isolate profile errors without
-    // removing the automatic full-field mapping from the demonstration.
     const basic=K.buildPrefillUrl(order,choice.ticket,{mode:'safe'});
     const ticketOnly=K.buildPrefillUrl(order,choice.ticket,{mode:'ticket'});
     const link=$('kh-prefill');link.href=basic;link.hidden=false;link.target='_blank';
-    const full=$('kh-prefill-full');full.href=choice.url;full.hidden=false;full.target='_blank';
-    const textFields=K.PREFILL_FIELD_KEYS.filter(x=>x!=='phone'&&x!=='country');
-    const textPrefill=$('kh-text-prefill');textPrefill.href=K.buildPrefillUrl(order,choice.ticket,{mode:'full',fields:textFields});textPrefill.hidden=false;
     const lab=$('kh-prefill-lab');lab.href='prefill-lab.html?id='+encodeURIComponent(order.id);lab.hidden=false;
     const fallback=$('kh-ticket-only');fallback.href=ticketOnly;fallback.hidden=false;fallback.target='_blank';
     $('kh-profile-help').hidden=false;
-    $('kh-explanation').textContent='Basic prefill has been observed working. Text-field prefill uses the correct KonfHub custom form IDs; Full also includes country and Indian national-format phone if available. Test each additional field to isolate any vendor-side validation errors. Consent is never preselected and payment status is never updated here.';
+    const detailsForm=$('kh-final-details');detailsForm.hidden=false;
+    const diet=$('kh-dietary'),consent=$('kh-consent'),full=$('kh-prefill-full');
+    diet.value=['Veg','Non Veg'].includes(order.person?.dietary)?order.person.dietary:'';
+    // Reflect an affirmative action already taken on the AsianHOST review page;
+    // old pending records are NOT silently consented.
+    consent.checked=order.consent?.accepted===true;
+    const originalWarnings=Array.from($('kh-warnings').querySelectorAll('li')).map(x=>x.textContent);
+    function refreshPrefill(){
+      const fields=K.getPrefillFields(order,choice.ticket);
+      const gaps=K.requiredPrefillGaps(order,choice.ticket);
+      const report=$('kh-prefill-report');report.hidden=false;
+      report.replaceChildren();
+      const heading=document.createElement('h3');heading.textContent='Ticket-specific field transfer ('+fields.filter(x=>x.ready).length+' ready)';
+      const list=document.createElement('ul');
+      for(const field of fields){
+        const li=document.createElement('li');
+        const status=document.createElement('strong');
+        status.textContent=field.ready?'Ready':!field.key?'Not on ticket':field.required?'Needs attention':'Optional blank';
+        li.append(status,document.createTextNode(' · '+field.label+(field.required?' (required)':'')));
+        if(!field.ready){li.className='kh-missing';li.title=field.reason;}
+        list.append(li);
+      }
+      report.append(heading,list);
+      if(gaps.length===0){
+        full.href=K.buildPrefillUrl(order,choice.ticket,{mode:'full'});
+        full.hidden=false;
+        $('kh-final-result').textContent='All mapped mandatory fields have values. Review every field and the declaration on KonfHub before payment.';
+      }else{
+        full.removeAttribute('href');full.hidden=true;
+        $('kh-final-result').textContent='Complete the required fields above to enable complete prefill. Missing: '+gaps.map(x=>x.label).join(', ')+'.';
+      }
+      const textFields=K.PREFILL_FIELD_KEYS.filter(x=>!['phone','country','dietary','consent'].includes(x));
+      const textPrefill=$('kh-text-prefill');
+      textPrefill.href=K.buildPrefillUrl(order,choice.ticket,{mode:'full',fields:textFields});
+      textPrefill.hidden=false;textPrefill.target='_blank';
+      const extra=[];
+      if(gaps.length)extra.push('Complete prefill is temporarily disabled because KonfHub requires: '+gaps.map(x=>x.label).join(', ')+'.');
+      const f=fields.find(x=>x.id==='consent');
+      if(f?.ready)extra.push('Explicit declaration accepted on AsianHOST. The exact KonfHub consent option is included as custom field '+f.key+'. KonfHub must still accept this field and the attendee must verify it there.');
+      if(order.purpose!=='author'&&fields.some(x=>x.id==='paperId'&&x.required))extra.push('KonfHub currently requires Paper ID/Title on this full ticket even for general attendees. The prefill explicitly says Not applicable; organizers should make these fields conditional.');
+      showWarnings([...originalWarnings,...extra]);
+      $('kh-explanation').textContent='Complete prefill includes the ticket-specific institution, reference, purpose, paper/IEEE fields, country, phone, dietary preference and explicit declaration when present. It does not verify payment. If KonfHub still reports a profile-update error, use Basic prefill and complete its form manually; the provider may need to correct validation.';
+    }
+    function markDirty(){
+      full.hidden=true;full.removeAttribute('href');
+      $('kh-final-result').textContent='You changed the required details. Select “Save required details for prefill” to regenerate the checkout URL.';
+    }
+    diet.addEventListener('change',markDirty);
+    consent.addEventListener('change',markDirty);
+    detailsForm.addEventListener('submit',e=>{
+      e.preventDefault();
+      if(!['Veg','Non Veg'].includes(diet.value)){
+        $('kh-final-result').textContent='Please select Vegetarian or Non-vegetarian.';
+        diet.focus();return;
+      }
+      if(!consent.checked){
+        $('kh-final-result').textContent='Complete prefill requires your explicit agreement to the declaration; this cannot be assumed.';
+        consent.focus();return;
+      }
+      const previouslyAccepted=order.consent?.accepted===true;
+      order.person.dietary=diet.value;
+      order.consent={accepted:true,
+        acceptedAt:previouslyAccepted&&order.consent.acceptedAt?order.consent.acceptedAt:new Date().toISOString(),
+        source:previouslyAccepted?'AsianHOST review / checkout':'AsianHOST checkout',
+        version:'KonfHub form 186672 / Nov 2026'};
+      order.updated=new Date().toISOString();
+      orders[id]=order;
+      if(!saveOrders(orders)){
+        $('kh-final-result').textContent='Could not save details in this browser. Enable local storage or retry.';return;
+      }
+      refreshPrefill();
+    });
+    refreshPrefill();
     if(/@(example\.(org|com|net)|test\.invalid)$/i.test(String(order.person.email||''))) {
-      showWarnings([...(Array.from($('kh-warnings').querySelectorAll('li')).map(x=>x.textContent)),
+      showWarnings([...Array.from($('kh-warnings').querySelectorAll('li')).map(x=>x.textContent),
         'This is a fictional example email address. Do not use sample identities for live registration or payment.']);
     }
   }else{

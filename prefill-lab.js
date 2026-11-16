@@ -20,7 +20,7 @@ async function initLab(){
   labText('lab-status','Ready to test — '+(order.categoryName||order.category)+' · '+(order.period||'fixed')+' · ticket '+K.getTicketId(ticket));
   labText('lab-ticket','Ticket data: '+(result.sourceByTicketId?.[String(K.getTicketId(ticket))]||result.source)+'. Verify actual availability and price on KonfHub.');
   const fields=K.getPrefillFields(order,ticket);
-  const selection=new Set(fields.filter(f=>f.ready&&!['country','phone'].includes(f.id)).map(f=>f.id));
+  const selection=new Set(); // Start from a truly isolated basic-only control.
   const body=labEl('lab-field-rows');
   for(const field of fields){
     const tr=document.createElement('tr');
@@ -45,9 +45,11 @@ async function initLab(){
     selection.clear();
     for(const f of fields){
       if(!f.ready||preset==='basic')continue;
-      if(preset==='text'&&!['phone','country'].includes(f.id))selection.add(f.id);
-      if(preset==='country'&&f.id!=='phone')selection.add(f.id);
-      if(preset==='phone'&&f.id!=='country')selection.add(f.id);
+      if(preset==='text'&&!['phone','country','consent','dietary'].includes(f.id))selection.add(f.id);
+      if(preset==='country'&&f.id==='country')selection.add(f.id);
+      if(preset==='phone'&&f.id==='phone')selection.add(f.id);
+      if(preset==='dietary'&&f.id==='dietary')selection.add(f.id);
+      if(preset==='consent'&&f.id==='consent')selection.add(f.id);
       if(preset==='all')selection.add(f.id);
     }
     refresh();

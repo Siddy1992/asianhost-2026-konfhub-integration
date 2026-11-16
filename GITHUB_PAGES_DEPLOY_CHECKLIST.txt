@@ -1,0 +1,15 @@
+ASIANHOST 2026 — DEPLOY THE COMPLETE PREFILL PACKAGE
+
+1. Use the GitHub Pages ZIP for GitHub, or the Complete Editable ZIP to edit locally.
+2. Back up the current repo: https://github.com/Siddy1992/asianhost-2026-konfhub-integration
+3. Extract the GitHub Pages ZIP and upload its CONTENTS into the repo ROOT.
+4. Commit to main (or test branch first). Settings > Pages > Deploy from branch > main > /(root).
+5. Open https://siddy1992.github.io/asianhost-2026-konfhub-integration/
+6. Hard-refresh (Ctrl+Shift+R). Create a NEW pending registration.
+7. Confirm Dietary preference and explicit Declaration appear; check the complete-prefill link contains form IDs 186671 and 186672.
+8. Check the KonfHub form without paying. If the profile error persists, use basic prefill and send a redacted error response to KonfHub support.
+9. Before collecting money: fix ticket availability windows, confirm GST/fees and SRIC settlement, test the actual KonfHub flow and backend reconciliation.
+
+READ FIRST: CONSENT_AND_COMPLETE_PREFILL_SETUP.md
+
+NOTE: Full prefill is implemented and offline-tested, but NOT proven to be accepted by KonfHub's backend. Never claim a payment is successful from GitHub Pages localStorage.
